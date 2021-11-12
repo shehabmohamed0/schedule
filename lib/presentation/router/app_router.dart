@@ -7,11 +7,13 @@ import 'package:schedule/logic/cubit/add_category/add_category_cubit.dart';
 import 'package:schedule/logic/cubit/add_task/add_task_cubit.dart';
 import 'package:schedule/logic/cubit/category/category_cubit.dart';
 import 'package:schedule/presentation/animation/drawer_navigator.dart';
+import 'package:schedule/presentation/notification_plugin.dart';
 import 'package:schedule/presentation/screens/add_category/add_category_screen.dart';
 import 'package:schedule/presentation/screens/add_task/add_task_screen.dart';
 import 'package:schedule/presentation/screens/categories/categories_screen.dart';
 import 'package:schedule/presentation/screens/category/category_screen.dart';
 import '../../core/exceptions/route_exception.dart';
+import '../notification_screen.dart';
 
 class AppRouter {
   static const String drawerNavigator = 'drawerNavigator';
@@ -19,6 +21,7 @@ class AppRouter {
   static const String categoriesScreen = 'categories';
   static const String addCategoryScreen = 'addCategory';
   static const String categoryScreen = 'category';
+  static const String notificationScreen = 'notification';
 
   const AppRouter._();
 
@@ -60,6 +63,11 @@ class AppRouter {
                 CategoryCubit(categoryNumTasks: args)..loadCategoryTasks(),
             child: CategoryScreen(),
           ),
+        );
+      case notificationScreen:
+        return MaterialPageRoute(
+          fullscreenDialog: true,
+          builder: (_) => NotificationScreen(),
         );
       default:
         throw const RouteException('Route not found!');
