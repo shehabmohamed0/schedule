@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schedule/data/models/recieved_notification.dart';
 
 import 'notification_plugin.dart';
 
@@ -13,9 +14,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
-    notificationPlugin
+    NotificationPlugin.instance
         .setListenedForLowerVersions(onNotificationInLowerVersions);
-    notificationPlugin.setOnNotificationClick(onNotificationClick);
+    NotificationPlugin.instance.setOnNotificationClick(onNotificationClick);
   }
 
   @override
@@ -30,10 +31,42 @@ class _NotificationScreenState extends State<NotificationScreen> {
         children: [
           ElevatedButton(
             onPressed: () async {
-              await notificationPlugin.showNotification();
+              await NotificationPlugin.instance.showNotification();
             },
             child: Text('Send notification+'),
-          )
+          ),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     await NotificationPlugin.instance.zonedScheduleNotification(DateTime.now() );
+          //   },
+          //   child: Text('zoned scheduled notification+'),
+          // ),
+          ElevatedButton(
+            onPressed: () async {
+              await NotificationPlugin.instance.showInsistentNotification();
+            },
+            child: Text('show Insistent notification+'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+             await NotificationPlugin.instance.showBigPictureNotification(
+                 );
+
+            },
+            child: Text('download and save file notification+'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await NotificationPlugin.instance.checkPendingNotificationRequests(context);
+            },
+            child: Text('show pending notification+'),
+          ),
+           ElevatedButton(
+            onPressed: () async {
+              await NotificationPlugin.instance.getNotificationChannels(context);
+            },
+            child: Text('show  notification with attachment'),
+          ),
         ],
       ),
     );

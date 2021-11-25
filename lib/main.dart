@@ -5,6 +5,7 @@ import 'package:schedule/core/constants/constants.dart';
 import 'package:schedule/data/data_providers/categories_dao.dart';
 import 'package:schedule/data/models/category.dart';
 import 'package:schedule/data/repositories/categories_repository.dart';
+import 'package:schedule/presentation/notification_plugin.dart';
 import 'package:schedule/presentation/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'logic/cubit/add_task/add_task_cubit.dart';
@@ -14,6 +15,8 @@ import 'logic/debug/app_bloc_observer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  NotificationPlugin.initialize();
   Bloc.observer = AppBlocObserver();
   await initialize();
   runApp(MyApp());
@@ -46,7 +49,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(primaryIconTheme: IconThemeData(color: KIconColor)),
         onGenerateRoute: AppRouter.onGenerateRoute,
-        initialRoute: AppRouter.notificationScreen,
+        initialRoute: AppRouter.drawerNavigator,
       ),
     );
   }

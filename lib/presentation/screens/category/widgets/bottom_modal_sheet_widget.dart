@@ -71,6 +71,7 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
                         },
                         dateTimeString: _getDateString(date))),
                 PickerOutlinedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                     onPressed: () async {
                       var newTime = await showTimePicker(
                           context: context, initialTime: time);

@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 
 class AppDatabase {
   static final AppDatabase instance = AppDatabase._init();
-  static Database? _database;
+  late final Database? _database;
 
   AppDatabase._init();
 

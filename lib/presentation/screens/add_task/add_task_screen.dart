@@ -104,9 +104,6 @@ class AddTaskScreen extends StatelessWidget {
                                 context: context, initialDate: state.dateTime);
                           },
                           dateTimeString: state.dateTimeString),
-                      const SizedBox(
-                        width: 10,
-                      ),
                       ColorPickerButton(
                         color: state.categoryColor,
                         onPressed: () async {
@@ -116,7 +113,43 @@ class AddTaskScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  Spacer(),
+                  Spacer(
+                    flex: 1,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(),
+                      IconButton(
+                        icon: Icon(
+                          Icons.timer_outlined,
+                          color: KIconColor,
+                          size: 28,
+                        ),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.timer_outlined,
+                          color: KIconColor,
+                          size: 28,
+                        ),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.timer_outlined,
+                          color: KIconColor,
+                          size: 28,
+                        ),
+                        onPressed: () {},
+                      ),
+                      SizedBox(),
+                    ],
+                  ),
+                  Spacer(
+                    flex: 2,
+                  ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Container(

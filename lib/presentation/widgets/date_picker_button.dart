@@ -15,6 +15,7 @@ class DatePickerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PickerOutlinedButton(
       onPressed: onPressed,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

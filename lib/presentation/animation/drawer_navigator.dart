@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:schedule/presentation/screens/hidden_drawer/hidden_drawer.dart';
-
+import 'package:schedule/core/constants/constants.dart';
 import '../screens/home_screen/home_screen.dart';
 
 class DrawerNavigator extends StatefulWidget {
@@ -23,6 +23,7 @@ class _DrawerNavigatorState extends State<DrawerNavigator>
   late double _maxDragStartEdge;
 
   late AnimationController _animationController;
+
   bool _canBeDragged = false;
 
   @override
@@ -32,6 +33,7 @@ class _DrawerNavigatorState extends State<DrawerNavigator>
       vsync: this,
       duration: _toggleDuration,
     );
+
   }
 
   void close() => _animationController.reverse();
@@ -53,69 +55,86 @@ class _DrawerNavigatorState extends State<DrawerNavigator>
     _minDragStartEdge = screenWidth * .15;
     _maxDragStartEdge = _maxSlide - 16;
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (_animationController.isCompleted) {
-          close();
+    return Container(
+      color: KDrawerColor,
+      child: WillPopScope(
+        onWillPop: () async {
+          if (_animationController.isCompleted) {
+            close();
 
-          return false;
-        }
-        return true;
-      },
-      child: GestureDetector(
-          onHorizontalDragStart: _onDragStart,
-          onHorizontalDragUpdate: _onDragUpdate,
-          onHorizontalDragEnd: _onDragEnd,
-          child: Stack(
-            children: [
-              HiddenDrawerScreen(closeCallBack: close),
-              AnimatedBuilder(
-                animation: _animationController,
-                child: HomeScreen(openCallBack: open),
-                builder: (context, child) {
-                  final double animValue = _animationController.value;
-                  final slideAmount = _maxSlide * animValue;
-                  final contentScale = 1.0 - (0.2 * animValue);
+            return false;
+          }
+          return true;
+        },
+        child: GestureDetector(
+            onHorizontalDragStart: _onDragStart,
+            onHorizontalDragUpdate: _onDragUpdate,
+            onHorizontalDragEnd: _onDragEnd,
+            child: Stack(
+              children: [
+                AnimatedBuilder(
+                    animation: _animationController,
+                    child: HiddenDrawerScreen(closeCallBack: close),
+                    builder: (context, child) {
+                      final double animValue = _animationController.value;
+                      final slideAmount = (-1*screenWidth) * (1-animValue);
 
-                  final opacityValue = animValue / 10 * 3;
-                  final borderRadiusValue = animValue * 50;
-
-                  if (_animationController.isCompleted)
-                    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                        statusBarIconBrightness: Brightness.light));
-                  if (_animationController.isDismissed)
-                    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                        statusBarIconBrightness: Brightness.dark));
-                  return GestureDetector(
-                    onTap: () {
-                      if (_animationController.isCompleted) {
-                        close();
-                      }
-                    },
-                    child: Transform(
-                      transform: Matrix4.identity()
+                      return Transform(
+                        transform: Matrix4.identity()
                         ..translate(slideAmount)
-                        ..scale(contentScale, contentScale),
-                      alignment: Alignment.centerLeft,
-                      child: AbsorbPointer(
-                        absorbing:
-                            _animationController.isCompleted ? true : false,
-                        child: ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusValue),
-                          child: Stack(
-                            children: [
-                              child!,
-                            ],
+                        ,
+                        alignment: Alignment.centerLeft,
+                        child: child!,
+                      );
+                    }),
+                AnimatedBuilder(
+                  animation: _animationController,
+                  child: HomeScreen(openCallBack: open),
+                  builder: (context, child) {
+                    final double animValue = _animationController.value;
+                    final slideAmount = _maxSlide * animValue;
+                    final contentScale = 1.0 - (0.2 * animValue);
+
+                    final opacityValue = animValue / 10 * 3;
+                    final borderRadiusValue = animValue * 50;
+
+                    if (_animationController.isCompleted)
+                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                          statusBarIconBrightness: Brightness.light));
+                    if (_animationController.isDismissed)
+                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                          statusBarIconBrightness: Brightness.dark));
+                    return GestureDetector(
+                      onTap: () {
+                        if (_animationController.isCompleted) {
+                          close();
+                        }
+                      },
+                      child: Transform(
+                        transform: Matrix4.identity()
+                          ..translate(slideAmount)
+                          ..scale(contentScale, contentScale),
+                        alignment: Alignment.centerLeft,
+                        child: AbsorbPointer(
+                          absorbing:
+                              _animationController.isCompleted ? true : false,
+                          child: ClipRRect(
+                            borderRadius:
+                                BorderRadius.circular(borderRadiusValue),
+                            child: Stack(
+                              children: [
+                                child!,
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          )),
+                    );
+                  },
+                ),
+              ],
+            )),
+      ),
     );
   }
 

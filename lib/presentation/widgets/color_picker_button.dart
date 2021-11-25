@@ -15,6 +15,7 @@ class ColorPickerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PickerOutlinedButton(
       onPressed: onPressed,
+      shape: CircleBorder(),
       child: Container(
         padding: EdgeInsets.all(2),
         decoration: BoxDecoration(
