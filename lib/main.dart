@@ -15,18 +15,21 @@ import 'logic/debug/app_bloc_observer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await initialize();
   NotificationPlugin.initialize();
   Bloc.observer = AppBlocObserver();
-  await initialize();
+
   runApp(MyApp());
 }
 
 Future<void> initialize() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  print('dasd_______________________asd');
   if (prefs.getInt('key') == null) {
+
     CategoriesDao.instance.create(
         Category(categoryName: 'Business', categoryColor: Colors.purpleAccent));
+
     CategoriesDao.instance.create(Category(
         categoryName: 'Personal', categoryColor: Colors.blueAccent[700]!));
     prefs.setInt('key', 1);
