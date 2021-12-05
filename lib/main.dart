@@ -8,6 +8,7 @@ import 'package:schedule/data/repositories/categories_repository.dart';
 import 'package:schedule/presentation/notification_plugin.dart';
 import 'package:schedule/presentation/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'data/models/recieved_notification.dart';
 import 'logic/cubit/add_task/add_task_cubit.dart';
 import 'logic/cubit/categories/categories_cubit.dart';
 import 'logic/cubit/tasks/tasks_cubit.dart';
@@ -17,6 +18,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialize();
   NotificationPlugin.initialize();
+  NotificationPlugin.instance
+      .setListenedForLowerVersions(onNotificationInLowerVersions);
+  NotificationPlugin.instance.setOnNotificationClick(onNotificationClick);
   Bloc.observer = AppBlocObserver();
 
   runApp(MyApp());
@@ -24,9 +28,7 @@ void main() async {
 
 Future<void> initialize() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  print('dasd_______________________asd');
   if (prefs.getInt('key') == null) {
-
     CategoriesDao.instance.create(
         Category(categoryName: 'Business', categoryColor: Colors.purpleAccent));
 
@@ -35,6 +37,10 @@ Future<void> initialize() async {
     prefs.setInt('key', 1);
   }
 }
+
+onNotificationInLowerVersions(ReceivedNotification receivedNotification) {}
+
+onNotificationClick(String payload) {}
 
 class MyApp extends StatelessWidget {
   @override
