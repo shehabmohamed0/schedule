@@ -5,7 +5,7 @@ import 'package:schedule/core/constants/constants.dart';
 import 'package:schedule/data/data_providers/categories_dao.dart';
 import 'package:schedule/data/models/category.dart';
 import 'package:schedule/data/repositories/categories_repository.dart';
-import 'package:schedule/presentation/notification_plugin.dart';
+import 'package:schedule/data/data_providers/notification_plugin.dart';
 import 'package:schedule/presentation/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'data/models/recieved_notification.dart';
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(primaryIconTheme: IconThemeData(color: KIconColor)),
         onGenerateRoute: AppRouter.onGenerateRoute,
-        initialRoute: AppRouter.drawerNavigator,
+        initialRoute: AppRouter.calendarScreen,
       ),
     );
   }

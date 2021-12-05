@@ -33,7 +33,6 @@ class _DrawerNavigatorState extends State<DrawerNavigator>
       vsync: this,
       duration: _toggleDuration,
     );
-
   }
 
   void close() => _animationController.reverse();
@@ -77,12 +76,10 @@ class _DrawerNavigatorState extends State<DrawerNavigator>
                     child: HiddenDrawerScreen(closeCallBack: close),
                     builder: (context, child) {
                       final double animValue = _animationController.value;
-                      final slideAmount = (-1*screenWidth) * (1-animValue);
+                      final slideAmount = (-1 * screenWidth) * (1 - animValue);
 
                       return Transform(
-                        transform: Matrix4.identity()
-                        ..translate(slideAmount)
-                        ,
+                        transform: Matrix4.identity()..translate(slideAmount),
                         alignment: Alignment.centerLeft,
                         child: child!,
                       );

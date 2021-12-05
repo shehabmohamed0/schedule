@@ -10,7 +10,7 @@ import 'package:schedule/data/models/add_model.dart';
 import 'package:schedule/data/models/category.dart';
 import 'package:schedule/data/models/taskWithColor.dart';
 import 'package:schedule/logic/cubit/tasks/tasks_cubit.dart';
-import 'package:schedule/presentation/notification_plugin.dart';
+import 'package:schedule/data/data_providers/notification_plugin.dart';
 
 part 'add_task_state.dart';
 

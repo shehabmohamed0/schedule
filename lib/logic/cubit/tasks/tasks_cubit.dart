@@ -7,7 +7,7 @@ import 'package:schedule/data/models/category.dart';
 import 'package:schedule/data/models/task.dart';
 import 'package:schedule/data/models/taskWithColor.dart';
 import 'package:schedule/data/repositories/tasks_repository.dart';
-import 'package:schedule/presentation/notification_plugin.dart';
+import 'package:schedule/data/data_providers/notification_plugin.dart';
 
 part 'tasks_state.dart';
 
