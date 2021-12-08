@@ -34,7 +34,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
                     categoryID: currentTask.task.categoryId,
                     categoryName: 'Any Thing',
                     categoryColor: currentTask.color ?? Colors.grey),
-                dateTime: currentTask.task.taskDay!));
+                dateTime: currentTask.task.createTime));
 
   void taskInputChanged(String task) {
     emit(state.copyWith(task: AddModel.dirty(task)));

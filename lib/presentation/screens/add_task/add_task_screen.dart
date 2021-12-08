@@ -36,7 +36,10 @@ class AddTaskScreen extends StatelessWidget {
             listener: (context, state) {
               if (state.isSubmitting && !state.isEdit) {
                 context.read<TasksCubit>().createTask(
-                    task: Task(name: state.task.value, taskDay: state.dateTime),
+                    task: Task(
+
+                        name: state.task.value,
+                        createTime: state.dateTime),
                     category: state.category ?? null);
 
                 Navigator.of(context).pop();
@@ -50,7 +53,7 @@ class AddTaskScreen extends StatelessWidget {
                             .taskId,
                         name: state.task.value,
                         categoryId: state.category?.categoryID,
-                        taskDay: state.dateTime),
+                        createTime: state.dateTime),
                     color: state.category?.categoryColor ?? Colors.grey);
                 Navigator.of(context).pop();
               }

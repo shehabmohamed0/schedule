@@ -44,18 +44,8 @@ class TasksDao {
     final db = await AppDatabase.instance.database;
 
     final result = await db.rawQuery('''
-    SELECT  * from $tasksTable JOIN $categoriesTable
-    ON $tasksTable.${TaskFields.categoryId} = $categoriesTable.${CategoryFields.id} 
-    ''');
-    return result.map((json) => TaskWithColor.fromJson(json)).toList();
-  }
-
-  static Future<List<TaskWithColor>> readAllWithColorStatic() async {
-    final db = await AppDatabase.instance.database;
-
-    final result = await db.rawQuery('''
-    SELECT  * from $tasksTable JOIN $categoriesTable
-    ON $tasksTable.${TaskFields.categoryId} = $categoriesTable.${CategoryFields.id} 
+    SELECT  * from $tasksTable LEFT JOIN $categoriesTable
+    ON ($tasksTable.${TaskFields.categoryId} = $categoriesTable.${CategoryFields.id} ) 
     ''');
     return result.map((json) => TaskWithColor.fromJson(json)).toList();
   }

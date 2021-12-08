@@ -60,7 +60,7 @@ class AppDatabase {
       ${TaskFields.isCompleted} $boolType,
       ${TaskFields.startTime} $nullTextType,
       ${TaskFields.endTime} $nullTextType,
-      ${TaskFields.taskDay} $nullTextType,
+      ${TaskFields.createTime} $textType,
       ${TaskFields.categoryId} $nullIntegerType, 
        CONSTRAINT fk_category FOREIGN KEY (${TaskFields.categoryId})
        REFERENCES $categoriesTable (${CategoryFields.id})

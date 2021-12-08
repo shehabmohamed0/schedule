@@ -34,14 +34,13 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   Future<void> createTask({required Task task, Category? category}) async {
-
     //add task to data base and return the task with taskId added
     final createdTask = await _tasksRepository
         .create(task.copyWith(categoryId: category?.categoryID));
     notificationPlugin.zonedScheduleNotification(
         id: createdTask.taskId!,
         title: createdTask.name,
-        dateTime: createdTask.taskDay!.add(Duration(seconds: 5)));
+        dateTime: createdTask.createTime.add(Duration(seconds: 5)));
     //this is the new task to be added
     final newTaskToAdd =
         TaskWithColor(task: createdTask, color: category?.categoryColor);
@@ -61,7 +60,7 @@ class TasksCubit extends Cubit<TasksState> {
     notificationPlugin.zonedScheduleNotification(
         id: task.taskId!,
         title: task.name,
-        dateTime: task.taskDay!.add(Duration(seconds: 5)));
+        dateTime: task.createTime.add(Duration(seconds: 5)));
     final newTaskToAdd =
         TaskWithColor(task: task, color: category?.categoryColor);
     if (state is TasksLoadedState) {

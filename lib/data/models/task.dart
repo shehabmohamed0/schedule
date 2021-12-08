@@ -6,14 +6,14 @@ final String tasksTable = 'tasks';
 class TaskFields {
   static final List<String> values = [
     /// Add all fields
-    id, name, isCompleted, startTime, endTime, taskDay, categoryId
+    id, name, isCompleted, startTime, endTime, createTime, categoryId
   ];
   static final String id = '_taskId';
   static final String name = 'taskName';
   static final String isCompleted = 'isCompleted';
   static final String startTime = 'startTime';
   static final String endTime = 'endTime';
-  static final String taskDay = 'taskDay';
+  static final String createTime = 'createTime';
   static final String categoryId = '_categoryId';
 }
 
@@ -24,7 +24,7 @@ class Task extends Equatable {
 
   final DateTime? startTime;
   final DateTime? endTime;
-  final DateTime? taskDay;
+  final DateTime createTime;
   final int? categoryId;
 
   const Task(
@@ -33,7 +33,7 @@ class Task extends Equatable {
       this.isCompleted: false,
       this.startTime,
       this.endTime,
-      this.taskDay,
+      required this.createTime,
       this.categoryId});
 
   Task copyWith({
@@ -51,7 +51,7 @@ class Task extends Equatable {
           isCompleted: isCompleted ?? this.isCompleted,
           startTime: startTime ?? this.startTime,
           endTime: endTime ?? this.endTime,
-          taskDay: taskDay ?? this.taskDay,
+          createTime: taskDay ?? this.createTime,
           categoryId: categoryId ?? this.categoryId);
 
   Map<String, dynamic> toJson() => {
@@ -61,18 +61,13 @@ class Task extends Equatable {
         TaskFields.startTime:
             startTime != null ? startTime!.toIso8601String() : null,
         TaskFields.endTime: endTime != null ? endTime!.toIso8601String() : null,
-        TaskFields.taskDay: taskDay != null ? taskDay!.toIso8601String() : null,
+        TaskFields.createTime: createTime.toIso8601String(),
         TaskFields.categoryId: categoryId,
       };
 
   static Task fromJson(Map<String, Object?> json) {
-    DateTime? _getDateTime(String? dateTime) {
-      if (dateTime == null) {
-        return null;
-      }
-
-      return DateTime.parse(dateTime);
-    }
+    DateTime? _getDateTime(String? dateTime) =>
+        dateTime == null ? null : DateTime.parse(dateTime);
 
     return Task(
       taskId: json[TaskFields.id] as int?,
@@ -80,7 +75,7 @@ class Task extends Equatable {
       isCompleted: json[TaskFields.isCompleted] == 1,
       startTime: _getDateTime(json[TaskFields.startTime] as String?),
       endTime: _getDateTime(json[TaskFields.endTime] as String?),
-      taskDay: _getDateTime(json[TaskFields.taskDay] as String?),
+      createTime: DateTime.parse(json[TaskFields.createTime] as String),
       categoryId: json[TaskFields.categoryId] as int?,
     );
   }
@@ -93,7 +88,7 @@ class Task extends Equatable {
         isCompleted,
         startTime,
         endTime,
-        taskDay,
+        createTime,
         categoryId,
       ];
 }

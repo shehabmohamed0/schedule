@@ -5,12 +5,14 @@ import 'package:schedule/data/models/category_num_tasks.dart';
 import 'package:schedule/data/models/taskWithColor.dart';
 import 'package:schedule/logic/cubit/add_category/add_category_cubit.dart';
 import 'package:schedule/logic/cubit/add_task/add_task_cubit.dart';
+import 'package:schedule/logic/cubit/calendar/calendar_cubit.dart';
 import 'package:schedule/logic/cubit/category/category_cubit.dart';
 import 'package:schedule/presentation/animation/drawer_navigator.dart';
 import 'package:schedule/data/data_providers/notification_plugin.dart';
 import 'package:schedule/presentation/screens/add_category/add_category_screen.dart';
 import 'package:schedule/presentation/screens/add_task/add_task_screen.dart';
 import 'package:schedule/presentation/screens/calendar/calendar_screen.dart';
+import 'package:schedule/presentation/screens/calendar/calendar_screen2.dart';
 import 'package:schedule/presentation/screens/categories/categories_screen.dart';
 import 'package:schedule/presentation/screens/category/category_screen.dart';
 import '../../core/exceptions/route_exception.dart';
@@ -73,8 +75,10 @@ class AppRouter {
         );
       case calendarScreen:
         return MaterialPageRoute(
-          fullscreenDialog: true,
-          builder: (_) => CalendarScreen(),
+          builder: (_) => BlocProvider<CalendarCubit>(
+            create: (context) => CalendarCubit()..initialize(),
+            child: CalendarScreen2(),
+          ),
         );
       default:
         throw const RouteException('Route not found!');

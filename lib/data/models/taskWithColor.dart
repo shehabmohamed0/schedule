@@ -13,9 +13,11 @@ class TaskWithColor extends Equatable {
   const TaskWithColor({required this.task, this.color});
 
   static TaskWithColor fromJson(Map<String, Object?> json) {
+    Color _getColor(int? colorNumber) =>
+        colorNumber == null ? Colors.grey : Color(colorNumber);
     return TaskWithColor(
         task: Task.fromJson(json),
-        color: Color(json[CategoryFields.color] as int));
+        color: _getColor(json[CategoryFields.color] as int?));
   }
 
   @override

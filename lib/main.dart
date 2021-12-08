@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(primaryIconTheme: IconThemeData(color: KIconColor)),
         onGenerateRoute: AppRouter.onGenerateRoute,
-        initialRoute: AppRouter.calendarScreen,
+        initialRoute: AppRouter.drawerNavigator,
       ),
     );
   }

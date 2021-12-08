@@ -37,10 +37,12 @@ class HomeScreen extends StatelessWidget {
           ),
           IconButton(
             icon: FaIcon(
-              FontAwesomeIcons.bell,
+              FontAwesomeIcons.calendar,
               color: KIconColor,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRouter.calendarScreen);
+            },
           )
         ],
       ),
