@@ -125,7 +125,7 @@ class AddTaskScreen extends StatelessWidget {
                       SizedBox(),
                       IconButton(
                         icon: Icon(
-                          Icons.timer_outlined,
+                          FontAwesomeIcons.clock,
                           color: KIconColor,
                           size: 28,
                         ),
@@ -133,15 +133,14 @@ class AddTaskScreen extends StatelessWidget {
                       ),
                       IconButton(
                         icon: Icon(
-                          Icons.timer_outlined,
-                          color: KIconColor,
+                          FontAwesomeIcons.moon,                          color: KIconColor,
                           size: 28,
                         ),
                         onPressed: () {},
                       ),
                       IconButton(
                         icon: Icon(
-                          Icons.timer_outlined,
+                          FontAwesomeIcons.file,
                           color: KIconColor,
                           size: 28,
                         ),

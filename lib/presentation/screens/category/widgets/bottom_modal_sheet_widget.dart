@@ -70,26 +70,27 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
                           }
                         },
                         dateTimeString: _getDateString(date))),
-                PickerOutlinedButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-                    onPressed: () async {
-                      var newTime = await showTimePicker(
-                          context: context, initialTime: time);
-                      if (newTime != null) {
-                        setState(
-                          () {
-                            time = newTime;
-                          },
-                        );
-                      }
-                    },
-                    child: Text(
-                      '${time.format(context)}',
-                      style: TextStyle(
-                          color: KIconColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500),
-                    )),
+                CalendarWidget(),
+                // PickerOutlinedButton(
+                //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                //     onPressed: () async {
+                //       var newTime = await showTimePicker(
+                //           context: context, initialTime: time);
+                //       if (newTime != null) {
+                //         setState(
+                //           () {
+                //             time = newTime;
+                //           },
+                //         );
+                //       }
+                //     },
+                //     child: Text(
+                //       '${time.format(context)}',
+                //       style: TextStyle(
+                //           color: KIconColor,
+                //           fontSize: 15,
+                //           fontWeight: FontWeight.w500),
+                //     )),
                 Spacer(),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -151,5 +152,19 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
     } else {
       return DateFormat.Md().format(date);
     }
+  }
+}
+class CalendarWidget extends StatelessWidget {
+  const CalendarWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(alignment: Alignment.bottomCenter,children: [
+      FaIcon(FontAwesomeIcons.solidCalendar,color: Colors.blueAccent.withOpacity(.5),size: 28,),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 2.5),
+        child: Text('18',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.white),),
+      ),
+    ],);
   }
 }

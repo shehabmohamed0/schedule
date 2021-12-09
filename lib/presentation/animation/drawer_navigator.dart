@@ -71,19 +71,7 @@ class _DrawerNavigatorState extends State<DrawerNavigator>
             onHorizontalDragEnd: _onDragEnd,
             child: Stack(
               children: [
-                AnimatedBuilder(
-                    animation: _animationController,
-                    child: HiddenDrawerScreen(closeCallBack: close),
-                    builder: (context, child) {
-                      final double animValue = _animationController.value;
-                      final slideAmount = (-1 * screenWidth) * (1 - animValue);
-
-                      return Transform(
-                        transform: Matrix4.identity()..translate(slideAmount),
-                        alignment: Alignment.centerLeft,
-                        child: child!,
-                      );
-                    }),
+                HiddenDrawerScreen(closeCallBack: close),
                 AnimatedBuilder(
                   animation: _animationController,
                   child: HomeScreen(openCallBack: open),
