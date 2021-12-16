@@ -5,7 +5,7 @@ import 'package:schedule/data/models/taskWithColor.dart';
 import 'list_tile_check_box.dart';
 
 class TaskListTile extends StatelessWidget {
-  final TaskWithColor taskWithColor;
+  final ColoredTask taskWithColor;
   final Function() onTap;
   final Function() onCheckBoxTab;
 

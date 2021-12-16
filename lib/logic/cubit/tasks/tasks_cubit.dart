@@ -33,39 +33,28 @@ class TasksCubit extends Cubit<TasksState> {
     emit(TasksLoadedState(tasks: await _tasksRepository.readAllWithColor()));
   }
 
-  Future<void> createTask({required Task task, Category? category}) async {
-    //add task to data base and return the task with taskId added
+  Future<void> createTaskAndAddItToUI(
+      {required Task task, Category? category}) async {
+
     final createdTask = await _tasksRepository
         .create(task.copyWith(categoryId: category?.categoryID));
-    notificationPlugin.zonedScheduleNotification(
-        id: createdTask.taskId!,
-        title: createdTask.name,
-        dateTime: createdTask.createTime.add(Duration(seconds: 5)));
-    //this is the new task to be added
-    final newTaskToAdd =
-        TaskWithColor(task: createdTask, color: category?.categoryColor);
 
-    if (state is TasksLoadedState) {
-      final updatedTasks =
-          List<TaskWithColor>.from((state as TasksLoadedState).tasks)
-            ..add(newTaskToAdd);
-
-      emit(TasksLoadedState(tasks: updatedTasks));
-    } else if (state is TasksEmptyState) {
-      emit(TasksLoadedState(tasks: [newTaskToAdd]));
-    }
+    await addTaskToUI(task: createdTask, category: category);
   }
 
-  Future<void> addTask({required Task task, Category? category}) async {
+  Future<void> addTaskToUI({required Task task, Category? category}) async {
     notificationPlugin.zonedScheduleNotification(
-        id: task.taskId!,
-        title: task.name,
-        dateTime: task.createTime.add(Duration(seconds: 5)));
+      id: task.taskId!,
+      title: task.name,
+      dateTime: task.taskDay.add(
+        Duration(seconds: 5),
+      ),
+    );
     final newTaskToAdd =
-        TaskWithColor(task: task, color: category?.categoryColor);
+        ColoredTask(task: task, color: category?.categoryColor);
     if (state is TasksLoadedState) {
       final updatedTasks =
-          List<TaskWithColor>.from((state as TasksLoadedState).tasks)
+          List<ColoredTask>.from((state as TasksLoadedState).tasks)
             ..add(newTaskToAdd);
       emit(TasksLoadedState(tasks: updatedTasks));
     } else if (state is TasksEmptyState) {
@@ -76,65 +65,67 @@ class TasksCubit extends Cubit<TasksState> {
   Future<void> updateTask({required Task task, required Color color}) async {
     if (state is TasksLoadedState) {
       _tasksRepository.update(task);
-      final updatedTodos =
-          List<TaskWithColor>.from((state as TasksLoadedState).tasks)
-              .map((TaskWithColor e) {
-        if (e.task.taskId == task.taskId) {
-          return TaskWithColor(task: task, color: color);
-        }
-        return e;
-      }).toList();
+      final updatedTasksList =
+          List<ColoredTask>.from((state as TasksLoadedState).tasks)
+              .map((ColoredTask e) => (e.task.taskId == task.taskId)
+                  ? ColoredTask(task: task, color: color)
+                  : e)
+              .toList();
 
-      emit(TasksLoadedState(tasks: updatedTodos));
+      emit(TasksLoadedState(tasks: updatedTasksList));
     }
   }
 
   Future<void> refreshUiOnUpdate({
-    required TaskWithColor taskWithColor,
+    required ColoredTask taskWithColor,
   }) async {
     if (state is TasksLoadedState) {
       final updatedTodos =
-          List<TaskWithColor>.from((state as TasksLoadedState).tasks)
-              .map((TaskWithColor e) {
-        if (e.task.taskId == taskWithColor.task.taskId) {
-          return TaskWithColor(
-              task: taskWithColor.task, color: taskWithColor.color);
-        }
-        return e;
-      }).toList();
+          List<ColoredTask>.from((state as TasksLoadedState).tasks)
+              .map((task) => task.task.taskId == taskWithColor.task.taskId
+                  ? ColoredTask(
+                      task: taskWithColor.task, color: taskWithColor.color)
+                  : task)
+              .toList();
 
       emit(TasksLoadedState(tasks: updatedTodos));
     }
   }
 
-  Future<void> deleteTask({required TaskWithColor task}) async {
+  Future<void> deleteTask({required ColoredTask task}) async {
     await _tasksRepository.delete(task.task.taskId!);
     if (state is TasksLoadedState) {
-      final updatedTasks = List<TaskWithColor>.from((state as TasksLoadedState)
+      final updatedTasks = List<ColoredTask>.from((state as TasksLoadedState)
           .tasks
           .where((element) => element.task.taskId != task.task.taskId!)
           .toList());
 
-      if (updatedTasks.isEmpty) {
-        emit(TasksEmptyState());
-      } else {
-        emit(TasksLoadedState(tasks: updatedTasks));
-      }
+      updatedTasks.isEmpty
+          ? emit(TasksEmptyState())
+          : emit(TasksLoadedState(tasks: updatedTasks));
     }
   }
 
   Future<void> deleteCategoryTasks({required Category category}) async {
     if (state is TasksLoadedState) {
-      final updatedTasks = List<TaskWithColor>.from((state as TasksLoadedState)
-          .tasks
-          .where((element) => element.task.categoryId != category.categoryID!)
-          .toList());
-
-      if (updatedTasks.isEmpty) {
-        emit(TasksEmptyState());
-      } else {
-        emit(TasksLoadedState(tasks: updatedTasks));
-      }
+      final updatedTasks = List<ColoredTask>.from(
+        (state as TasksLoadedState)
+            .tasks
+            .where((element) => element.task.categoryId != category.categoryID!)
+            .toList(),
+      );
+      updatedTasks.isEmpty
+          ? emit(TasksEmptyState())
+          : emit(TasksLoadedState(tasks: updatedTasks));
     }
   }
+
+  List<ColoredTask> getNewListAndRemove({
+    required List<ColoredTask> oldList,
+    required ColoredTask taskToBeRemoved,
+  }) =>
+      List<ColoredTask>.from(oldList)
+          .where((element) =>
+              element.task.categoryId != taskToBeRemoved.task.categoryId!)
+          .toList();
 }

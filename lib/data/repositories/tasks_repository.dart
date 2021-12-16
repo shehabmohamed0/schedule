@@ -18,11 +18,11 @@ class TasksRepository {
     return tasksDao.readAll();
   }
 
-  Future<List<TaskWithColor>> readAllWithColor() async {
+  Future<List<ColoredTask>> readAllWithColor() async {
     return await tasksDao.readAllWithColor();
   }
 
-  Future<List<TaskWithColor>> readCategoryTasksWithColor(
+  Future<List<ColoredTask>> readCategoryTasksWithColor(
       Category category) async {
     return await tasksDao.readCategoryTasksWithColor(category);
   }

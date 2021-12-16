@@ -1,20 +1,25 @@
 part of 'add_task_cubit.dart';
 
 class AddTaskState extends Equatable {
-  final AddModel task;
+  final FormzNameModel task;
+  final DateTime taskDateTime;
+  final bool hasStartTime;
+  final DateTime? reminderDateTime;
   final Category? category;
-  final DateTime dateTime;
 
   //Identify that are we adding a new task or modifying existing one
   final bool isEdit;
   final bool isSubmitting;
 
-  AddTaskState(
-      {required this.isEdit,
-      required this.isSubmitting,
-      required this.task,
-      required this.category,
-      required this.dateTime});
+  AddTaskState({
+    required this.isEdit,
+    required this.isSubmitting,
+    required this.task,
+    required this.taskDateTime,
+    required this.hasStartTime,
+    this.reminderDateTime,
+    required this.category,
+  });
 
   String? get errorText {
     return ((task.pure) || task.valid) ? null : 'Task can not be empty.';
@@ -25,9 +30,9 @@ class AddTaskState extends Equatable {
   }
 
   String get dateTimeString {
-    int differenceInDays = dateTime.day - DateTime.now().day;
-    int differenceInMonths = dateTime.month - DateTime.now().month;
-    int differenceInYears = dateTime.year - DateTime.now().year;
+    int differenceInDays = taskDateTime.day - DateTime.now().day;
+    int differenceInMonths = taskDateTime.month - DateTime.now().month;
+    int differenceInYears = taskDateTime.year - DateTime.now().year;
     if (differenceInDays == 0 &&
         differenceInMonths == 0 &&
         differenceInYears == 0) {
@@ -41,7 +46,7 @@ class AddTaskState extends Equatable {
         differenceInYears == 0) {
       return 'Yesterday';
     } else {
-      return DateFormat.Md().format(dateTime);
+      return DateFormat.Md().format(taskDateTime);
     }
   }
 
@@ -49,18 +54,31 @@ class AddTaskState extends Equatable {
 
   AddTaskState copyWith({
     // we don't need to change isEdit
-    AddModel? task,
-    Category? category,
-    DateTime? dateTime,
     bool? isSubmitting,
+    FormzNameModel? task,
+    DateTime? taskDateTime,
+    bool? hasStartTime,
+    DateTime? reminderDateTime,
+    Category? category,
   }) =>
       AddTaskState(
-          isEdit: this.isEdit,
-          isSubmitting: isSubmitting ?? this.isSubmitting,
-          task: task ?? this.task,
-          category: category ?? this.category,
-          dateTime: dateTime ?? this.dateTime);
+        isEdit: this.isEdit,
+        isSubmitting: isSubmitting ?? this.isSubmitting,
+        task: task ?? this.task,
+        taskDateTime: taskDateTime ?? this.taskDateTime,
+        hasStartTime: hasStartTime ?? this.hasStartTime,
+        reminderDateTime: reminderDateTime ?? this.reminderDateTime,
+        category: category ?? this.category,
+      );
 
   @override
-  List<Object?> get props => [task, category, dateTime, isEdit, isSubmitting];
+  List<Object?> get props => [
+        isEdit,
+        isSubmitting,
+        task,
+        taskDateTime,
+        hasStartTime,
+        reminderDateTime,
+        category
+      ];
 }

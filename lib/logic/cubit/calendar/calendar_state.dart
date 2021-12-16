@@ -10,18 +10,18 @@ class CalendarState extends Equatable {
 
   final DateTime focusedDay;
   final DateTime selectedDay;
-  final LinkedHashMap<DateTime, List<TaskWithColor>> tasksEvents;
-  final List<TaskWithColor> selectedEvents;
+  final LinkedHashMap<DateTime, List<ColoredTask>> tasksEvents;
+  final List<ColoredTask> selectedEvents;
 
-  List<TaskWithColor> getEventsForDay(DateTime day) {
+  List<ColoredTask> getEventsForDay(DateTime day) {
     return tasksEvents[day] ?? [];
   }
 
   CalendarState copyWith({
     DateTime? focusedDay,
     DateTime? selectedDay,
-    LinkedHashMap<DateTime, List<TaskWithColor>>? tasksEvents,
-    List<TaskWithColor>? selectedEvents,
+    LinkedHashMap<DateTime, List<ColoredTask>>? tasksEvents,
+    List<ColoredTask>? selectedEvents,
   }) =>
       CalendarState(
           focusedDay: focusedDay ?? this.focusedDay,

@@ -2,7 +2,7 @@ part of 'add_category_cubit.dart';
 
 class AddCategoryState extends Equatable {
   final int? categoryId;
-  final AddModel categoryName;
+  final FormzNameModel categoryName;
   final Color categoryColor;
   final FormzStatus status;
 
@@ -20,7 +20,7 @@ class AddCategoryState extends Equatable {
   });
 
   AddCategoryState copyWith(
-          {AddModel? categoryName,
+          {FormzNameModel? categoryName,
           Color? categoryColor,
           FormzStatus? status,
           bool? isSubmitting}) =>

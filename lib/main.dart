@@ -38,25 +38,27 @@ Future<void> initialize() async {
   }
 }
 
-onNotificationInLowerVersions(ReceivedNotification receivedNotification) {}
+void onNotificationInLowerVersions(ReceivedNotification receivedNotification) {}
 
-onNotificationClick(String payload) {}
+void onNotificationClick(String payload) {}
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<TasksCubit>(
-          create: (context) => TasksCubit()..loadTasks(),
+          create: (BuildContext context) => TasksCubit()..loadTasks(),
         ),
         BlocProvider<CategoriesCubit>(
-          create: (context) => CategoriesCubit()..loadCategories(),
+          create: (BuildContext context) => CategoriesCubit()..loadCategories(),
         ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(primaryIconTheme: IconThemeData(color: KIconColor)),
+        theme: ThemeData(primaryIconTheme: const IconThemeData(color: KIconColor)),
         onGenerateRoute: AppRouter.onGenerateRoute,
         initialRoute: AppRouter.drawerNavigator,
       ),

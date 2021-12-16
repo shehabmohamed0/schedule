@@ -40,10 +40,10 @@ class NotificationPlugin {
     if (Platform.isIOS) {
       _requestIosPermissions();
     }
-    initializePlatformSpecifics();
+    _initializePlatformSpecifics();
   }
 
-  initializePlatformSpecifics() {
+  _initializePlatformSpecifics() {
     var initializationSettingsForAndroid =
         AndroidInitializationSettings('app_icon');
     var initializationSettingsForIos = IOSInitializationSettings(

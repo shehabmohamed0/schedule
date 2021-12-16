@@ -14,7 +14,7 @@ class TasksLoadingState extends TasksState {
 }
 
 class TasksLoadedState extends TasksState {
-  final List<TaskWithColor> tasks;
+  final List<ColoredTask> tasks;
 
   TasksLoadedState({required this.tasks});
 

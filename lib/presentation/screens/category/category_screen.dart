@@ -185,7 +185,7 @@ class CategoryScreen extends StatelessWidget {
                                                 await context
                                                     .read<CategoryCubit>()
                                                     .updateTask(
-                                                        taskWithColor:
+                                                        coloredTask:
                                                             state.tasks[index]);
 
                                             context

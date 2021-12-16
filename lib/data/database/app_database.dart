@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:schedule/data/models/category.dart';
 import 'package:schedule/data/models/task.dart';
@@ -58,9 +57,9 @@ class AppDatabase {
       ${TaskFields.id} $idType,
       ${TaskFields.name} $textType,
       ${TaskFields.isCompleted} $boolType,
-      ${TaskFields.startTime} $nullTextType,
-      ${TaskFields.endTime} $nullTextType,
-      ${TaskFields.createTime} $textType,
+      ${TaskFields.taskDate} $textType,
+      ${TaskFields.hasStartTime} $boolType,
+      ${TaskFields.reminderDateTime} $nullTextType,
       ${TaskFields.categoryId} $nullIntegerType, 
        CONSTRAINT fk_category FOREIGN KEY (${TaskFields.categoryId})
        REFERENCES $categoriesTable (${CategoryFields.id})

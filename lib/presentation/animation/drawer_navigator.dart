@@ -80,7 +80,6 @@ class _DrawerNavigatorState extends State<DrawerNavigator>
                     final slideAmount = _maxSlide * animValue;
                     final contentScale = 1.0 - (0.2 * animValue);
 
-                    final opacityValue = animValue / 10 * 3;
                     final borderRadiusValue = animValue * 50;
 
                     if (_animationController.isCompleted)

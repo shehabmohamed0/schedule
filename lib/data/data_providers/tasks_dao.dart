@@ -40,17 +40,17 @@ class TasksDao {
     return result.map((json) => Task.fromJson(json)).toList();
   }
 
-  Future<List<TaskWithColor>> readAllWithColor() async {
+  Future<List<ColoredTask>> readAllWithColor() async {
     final db = await AppDatabase.instance.database;
 
     final result = await db.rawQuery('''
     SELECT  * from $tasksTable LEFT JOIN $categoriesTable
     ON ($tasksTable.${TaskFields.categoryId} = $categoriesTable.${CategoryFields.id} ) 
     ''');
-    return result.map((json) => TaskWithColor.fromJson(json)).toList();
+    return result.map((json) => ColoredTask.fromJson(json)).toList();
   }
 
-  Future<List<TaskWithColor>> readCategoryTasksWithColor(
+  Future<List<ColoredTask>> readCategoryTasksWithColor(
       Category category) async {
     final db = await AppDatabase.instance.database;
 
@@ -59,7 +59,7 @@ class TasksDao {
     ON $tasksTable.${TaskFields.categoryId} = $categoriesTable.${CategoryFields.id} 
     WHERE $tasksTable.${TaskFields.categoryId} = ${category.categoryID}
     ''');
-    return result.map((json) => TaskWithColor.fromJson(json)).toList();
+    return result.map((json) => ColoredTask.fromJson(json)).toList();
   }
 
   Future<int> update(Task task) async {

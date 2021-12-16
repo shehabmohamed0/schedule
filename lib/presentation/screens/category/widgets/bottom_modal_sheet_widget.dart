@@ -98,20 +98,21 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
                     shape: CircleBorder(),
                   ),
                   onPressed: () async {
-                    if (inputText.text.isEmpty)
-                      await Fluttertoast.showToast(
-                          msg: "Task can't be empty.",
-                          gravity: ToastGravity.SNACKBAR,
-                          fontSize: 16.0);
-
-                    final newTask =
-                    //any Id
-                        Task(name: inputText.text, createTime: DateTime.now());
-                    final taskWithID = await context
-                        .read<CategoryCubit>()
-                        .createTask(task: newTask, category: widget.category);
-                    await context.read<TasksCubit>().addTask(
-                        task: taskWithID!.task, category: widget.category);
+                    //TODO: Implement this method
+                    // if (inputText.text.isEmpty)
+                    //   await Fluttertoast.showToast(
+                    //       msg: "Task can't be empty.",
+                    //       gravity: ToastGravity.SNACKBAR,
+                    //       fontSize: 16.0);
+                    //
+                    // final newTask =
+                    // //any Id
+                    //     Task(name: inputText.text, taskDay: DateTime.now());
+                    // final taskWithID = await context
+                    //     .read<CategoryCubit>()
+                    //     .createTask(task: newTask, category: widget.category);
+                    // await context.read<TasksCubit>().addTask(
+                    //     task: taskWithID!.task, category: widget.category);
                     inputText.clear();
                   },
                   child: Padding(

@@ -31,7 +31,7 @@ class TasksListView extends StatelessWidget {
 }
 
 class _TasksLoadedStateWidget extends StatelessWidget {
-  final List<TaskWithColor> tasks;
+  final List<ColoredTask> tasks;
 
   const _TasksLoadedStateWidget({Key? key, required this.tasks})
       : super(key: key);

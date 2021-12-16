@@ -9,7 +9,7 @@ class CategoryTasksLoadingState extends CategoryState {
 
 class CategoryTasksLoadedState extends CategoryState {
   final CategoryNumTasks categoryNumTasks;
-  final List<TaskWithColor> tasks;
+  final List<ColoredTask> tasks;
 
   CategoryTasksLoadedState(
       {required this.categoryNumTasks, required this.tasks});

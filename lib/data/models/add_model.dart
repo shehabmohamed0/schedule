@@ -2,10 +2,10 @@ import 'package:formz/formz.dart';
 
 enum TaskValidationError { empty }
 
-class AddModel extends FormzInput<String, TaskValidationError> {
-  const AddModel.pure() : super.pure('');
+class FormzNameModel extends FormzInput<String, TaskValidationError> {
+  const FormzNameModel.pure() : super.pure('');
 
-  const AddModel.dirty([String value = '']) : super.dirty(value);
+  const FormzNameModel.dirty([String value = '']) : super.dirty(value);
 
   @override
   TaskValidationError? validator(String value) {

@@ -14,22 +14,22 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
               ? AddCategoryState(
                   isEdit: false,
                   isSubmitting: false,
-                  categoryName: AddModel.pure(),
+                  categoryName: FormzNameModel.pure(),
                   categoryColor: Colors.blueAccent.shade400,
                   status: FormzStatus.pure)
               : AddCategoryState(
                   isEdit: true,
                   isSubmitting: false,
                   categoryId: currentCategory.categoryID,
-                  categoryName: AddModel.dirty(currentCategory.categoryName),
+                  categoryName: FormzNameModel.dirty(currentCategory.categoryName),
                   categoryColor: currentCategory.categoryColor,
                   status: FormzStatus.valid),
         );
 
   void categoryInputChanged(String category) {
-    AddModel newCategory = AddModel.dirty(category);
+    FormzNameModel newCategory = FormzNameModel.dirty(category);
     emit(state.copyWith(
-        categoryName: AddModel.dirty(category),
+        categoryName: FormzNameModel.dirty(category),
         status: Formz.validate([newCategory])));
   }
 
@@ -39,7 +39,7 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
 
   void submit() {
     if (state.categoryName.pure) {
-      final newCategory = AddModel.dirty('');
+      final newCategory = FormzNameModel.dirty('');
       emit(state.copyWith(
           categoryName: newCategory, status: FormzStatus.invalid));
     } else if (state.categoryName.valid) {

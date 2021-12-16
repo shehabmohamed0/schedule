@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:schedule/core/utils.dart';
+import 'package:schedule/core/utils/utils.dart';
 import 'package:schedule/data/models/taskWithColor.dart';
 import 'package:schedule/data/repositories/tasks_repository.dart';
 import 'package:schedule/logic/rebuild_bloc.dart';
@@ -25,14 +25,14 @@ class CalendarCubit extends Cubit<CalendarState> {
 
   Future<void> initialize() async {
     final allTasks = await _tasksRepository.readAllWithColor();
-    final LinkedHashMap<DateTime, List<TaskWithColor>> tasksEvents =
+    final LinkedHashMap<DateTime, List<ColoredTask>> tasksEvents =
         LinkedHashMap(equals: isSameDay, hashCode: getHashCode);
 
     allTasks.forEach((element) {
-      tasksEvents.containsKey(element.task.createTime)
-          ? tasksEvents[element.task.createTime]!.add(element)
+      tasksEvents.containsKey(element.task.taskDay)
+          ? tasksEvents[element.task.taskDay]!.add(element)
           : tasksEvents.putIfAbsent(
-              element.task.createTime, () => []..add(element));
+              element.task.taskDay, () => []..add(element));
     });
 
     emit(state.copyWith(
@@ -48,17 +48,17 @@ class CalendarCubit extends Cubit<CalendarState> {
     }
   }
 
-  void addTaskTask(TaskWithColor taskWithColor) {}
+  void addTaskTask(ColoredTask taskWithColor) {}
 
 //a actual update on database will be done by tasks cubit
-  Future<void> updateTask(TaskWithColor taskWithColor) async {
+  Future<void> updateTask(ColoredTask taskWithColor) async {
     final tasksEvents = state.tasksEvents;
     final currentTask = taskWithColor.task;
 
-    final newTaskWithColor = TaskWithColor(
+    final newTaskWithColor = ColoredTask(
         task: currentTask.copyWith(isCompleted: !currentTask.isCompleted),
         color: taskWithColor.color);
-    final newSelectedEvents = List<TaskWithColor>.from(
+    final newSelectedEvents = List<ColoredTask>.from(
       state.selectedEvents.map(
         (element) => element.task.taskId != taskWithColor.task.taskId
             ? element
@@ -66,17 +66,17 @@ class CalendarCubit extends Cubit<CalendarState> {
       ),
     );
 
-    tasksEvents[taskWithColor.task.createTime] = newSelectedEvents;
+    tasksEvents[taskWithColor.task.taskDay] = newSelectedEvents;
     emit(state.copyWith(
         tasksEvents: tasksEvents, selectedEvents: newSelectedEvents));
   }
 
-  Future<void> deleteTask(TaskWithColor taskWithColor) async {
+  Future<void> deleteTask(ColoredTask taskWithColor) async {
     final tasksEvents = state.tasksEvents;
-    final newSelectedEvents = List<TaskWithColor>.from(state.selectedEvents
+    final newSelectedEvents = List<ColoredTask>.from(state.selectedEvents
         .where((element) => element.task.taskId != taskWithColor.task.taskId));
 
-    tasksEvents[taskWithColor.task.createTime] = newSelectedEvents;
+    tasksEvents[taskWithColor.task.taskDay] = newSelectedEvents;
     emit(state.copyWith(
         tasksEvents: tasksEvents, selectedEvents: newSelectedEvents));
   }

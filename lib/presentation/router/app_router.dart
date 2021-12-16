@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:schedule/data/models/category.dart';
 import 'package:schedule/data/models/category_num_tasks.dart';
 import 'package:schedule/data/models/taskWithColor.dart';
 import 'package:schedule/logic/cubit/add_category/add_category_cubit.dart';
@@ -8,11 +7,9 @@ import 'package:schedule/logic/cubit/add_task/add_task_cubit.dart';
 import 'package:schedule/logic/cubit/calendar/calendar_cubit.dart';
 import 'package:schedule/logic/cubit/category/category_cubit.dart';
 import 'package:schedule/presentation/animation/drawer_navigator.dart';
-import 'package:schedule/data/data_providers/notification_plugin.dart';
 import 'package:schedule/presentation/screens/add_category/add_category_screen.dart';
 import 'package:schedule/presentation/screens/add_task/add_task_screen.dart';
 import 'package:schedule/presentation/screens/calendar/calendar_screen.dart';
-import 'package:schedule/presentation/screens/calendar/calendar_screen2.dart';
 import 'package:schedule/presentation/screens/categories/categories_screen.dart';
 import 'package:schedule/presentation/screens/category/category_screen.dart';
 import '../../core/exceptions/route_exception.dart';
@@ -36,7 +33,7 @@ class AppRouter {
           builder: (_) => DrawerNavigator(),
         );
       case addTaskScreen:
-        final args = settings.arguments as TaskWithColor?;
+        final ColoredTask? args = settings.arguments as ColoredTask?;
 
         return PageRouteBuilder(
           pageBuilder: (_, __, ___) => BlocProvider<AddTaskCubit>(
@@ -48,14 +45,14 @@ class AppRouter {
         );
       case categoriesScreen:
         return MaterialPageRoute(
-          builder: (_) => CategoriesScreen(),
+          builder: (_) => const CategoriesScreen(),
         );
       case addCategoryScreen:
         return MaterialPageRoute(
           fullscreenDialog: true,
           builder: (_) => BlocProvider<AddCategoryCubit>(
             create: (context) => AddCategoryCubit(),
-            child: AddCategoryScreen(),
+            child: const AddCategoryScreen(),
           ),
         );
       case categoryScreen:
@@ -65,19 +62,19 @@ class AppRouter {
           builder: (_) => BlocProvider<CategoryCubit>(
             create: (context) =>
                 CategoryCubit(categoryNumTasks: args)..loadCategoryTasks(),
-            child: CategoryScreen(),
+            child: const CategoryScreen(),
           ),
         );
       case notificationScreen:
         return MaterialPageRoute(
           fullscreenDialog: true,
-          builder: (_) => NotificationScreen(),
+          builder: (_) => const NotificationScreen(),
         );
       case calendarScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<CalendarCubit>(
             create: (context) => CalendarCubit()..initialize(),
-            child: CalendarScreen2(),
+            child: const CalendarScreen(),
           ),
         );
       default:

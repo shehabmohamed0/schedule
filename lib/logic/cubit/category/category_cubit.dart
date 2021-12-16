@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:schedule/core/utils/methods.dart';
 import 'package:schedule/data/models/category.dart';
 import 'package:schedule/data/models/category_num_tasks.dart';
 import 'package:schedule/data/models/task.dart';
@@ -19,99 +20,74 @@ class CategoryCubit extends Cubit<CategoryState> {
   Future<void> loadCategoryTasks() async {
     final tasks = await _tasksRepository
         .readCategoryTasksWithColor(categoryNumTasks.category);
-    emit(CategoryTasksLoadedState(
-        categoryNumTasks: categoryNumTasks, tasks: tasks));
+    _emitCategoryTasksLoadedState(
+        currentCategoryNumTasks: categoryNumTasks, newTasks: tasks);
   }
 
   Future<void> updateCategory(Category category) async {
     if (state is CategoryTasksLoadedState) {
       final tasks = await _tasksRepository
           .readCategoryTasksWithColor(categoryNumTasks.category);
-
-      emit(CategoryTasksLoadedState(
-          categoryNumTasks: (state as CategoryTasksLoadedState)
-              .categoryNumTasks
-              .copyWith(category: category),
-          tasks: tasks));
+      final currentState = state as CategoryTasksLoadedState;
+      _emitCategoryTasksLoadedState(
+          currentCategoryNumTasks: currentState.categoryNumTasks,
+          newTasks: tasks,
+          category: category);
     }
   }
 
-  Future<TaskWithColor?> createTask(
+  Future<ColoredTask?> createTask(
       {required Task task, Category? category}) async {
-    //add task to data base and return the task with taskId added
     final createdTask = await _tasksRepository
         .create(task.copyWith(categoryId: category?.categoryID));
-    //this is the new task to be added
-    final newTaskToAdd =
-        TaskWithColor(task: createdTask, color: category?.categoryColor);
+    final newColoredTask =
+        ColoredTask(task: createdTask, color: category?.categoryColor);
+    if (state is CategoryTasksLoadedState) {
+      final currentState = state as CategoryTasksLoadedState;
+      final updatedTasks = List<ColoredTask>.from(currentState.tasks)
+        ..add(newColoredTask);
+
+      _emitCategoryTasksLoadedState(
+          currentCategoryNumTasks: currentState.categoryNumTasks,
+          newTasks: updatedTasks,
+          newNumAllTasks: currentState.categoryNumTasks.numAllTasks + 1,);
+
+      return newColoredTask;
+    }
+  }
+
+  Future<ColoredTask> updateTask({required ColoredTask coloredTask}) async {
+    final newColoredTask = coloredTask.copyWith(!coloredTask.task.isCompleted);
+    _tasksRepository.update(newColoredTask.task);
 
     if (state is CategoryTasksLoadedState) {
       final currentState = state as CategoryTasksLoadedState;
-      final updatedTasks = List<TaskWithColor>.from(currentState.tasks)
-        ..add(newTaskToAdd);
-
-      emit(CategoryTasksLoadedState(
-          categoryNumTasks: currentState.categoryNumTasks.copyWith(
-              numAllTasks: currentState.categoryNumTasks.numAllTasks + 1),
-          tasks: updatedTasks));
-      return newTaskToAdd;
+      final updatedTasksList = MethodUtils.updateTaskInList(
+          oldList: currentState.tasks, newColoredTask: newColoredTask);
+      _countNewCategoryInfoAndEmitState(
+          currentState: currentState,
+          newColoredTask: newColoredTask,
+          updatedTasksList: updatedTasksList);
     }
+    return newColoredTask;
   }
 
-  Future<TaskWithColor> updateTask(
-      {required TaskWithColor taskWithColor}) async {
-    final newTaskWithColor = TaskWithColor(
-        task: taskWithColor.task
-            .copyWith(isCompleted: !taskWithColor.task.isCompleted),
-        color: taskWithColor.color);
-
-    _tasksRepository.update(newTaskWithColor.task);
-    if (state is CategoryTasksLoadedState) {
-      final currentState = (state as CategoryTasksLoadedState);
-
-      final updatedTasks =
-          List<TaskWithColor>.from(currentState.tasks).map((TaskWithColor e) {
-        if (e.task.taskId == newTaskWithColor.task.taskId) {
-          return newTaskWithColor;
-        }
-        return e;
-      }).toList();
-
-      final numAllTasks = currentState.categoryNumTasks.numAllTasks;
-      final numCompletedTasks = currentState.categoryNumTasks.numCompletedTasks;
-
-      final newNumCompletedTasks = newTaskWithColor.task.isCompleted
-          ? numCompletedTasks + 1
-          : numCompletedTasks - 1;
-
-      emit(CategoryTasksLoadedState(
-          categoryNumTasks: categoryNumTasks.copyWith(
-              numAllTasks: numAllTasks,
-              numCompletedTasks: newNumCompletedTasks),
-          tasks: updatedTasks));
-    }
-    return newTaskWithColor;
-  }
-
-  Future<void> deleteTask({required TaskWithColor task}) async {
+  Future<void> deleteTask({required ColoredTask task}) async {
     await _tasksRepository.delete(task.task.taskId!);
     if (state is CategoryTasksLoadedState) {
       final currentState = (state as CategoryTasksLoadedState);
-      final updatedTasks = List<TaskWithColor>.from(currentState.tasks
-          .where((element) => element.task.taskId != task.task.taskId!)
-          .toList());
-
+      final updatedTasks = MethodUtils.deleteTaskFromList(
+          oldList: currentState.tasks, task: task);
       final numAllTasks = currentState.categoryNumTasks.numAllTasks;
       final numCompletedTasks = currentState.categoryNumTasks.numCompletedTasks;
 
       final newNumCompletedTasks =
           task.task.isCompleted ? numCompletedTasks - 1 : numCompletedTasks;
-
-      emit(CategoryTasksLoadedState(
-          categoryNumTasks: currentState.categoryNumTasks.copyWith(
-              numAllTasks: numAllTasks - 1,
-              numCompletedTasks: newNumCompletedTasks),
-          tasks: updatedTasks));
+      _emitCategoryTasksLoadedState(
+          currentCategoryNumTasks: currentState.categoryNumTasks,
+          newNumAllTasks: numAllTasks - 1,
+          newNumCompletedTasks: newNumCompletedTasks,
+          newTasks: updatedTasks);
     }
   }
 
@@ -119,7 +95,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     await _tasksRepository.deleteCategoryTasks(category.categoryID!);
     if (state is CategoryTasksLoadedState) {
       final currentState = (state as CategoryTasksLoadedState);
-      final updatedTasks = List<TaskWithColor>.from(currentState.tasks
+      final updatedTasks = List<ColoredTask>.from(currentState.tasks
           .where((element) => element.task.categoryId != category.categoryID!)
           .toList());
 
@@ -134,5 +110,43 @@ class CategoryCubit extends Cubit<CategoryState> {
               numCompletedTasks: numCompletedTasks),
           tasks: updatedTasks));
     }
+  }
+
+  void _countNewCategoryInfoAndEmitState(
+      {required CategoryTasksLoadedState currentState,
+      required ColoredTask newColoredTask,
+      required List<ColoredTask> updatedTasksList}) {
+    final currentCategoryWithInfo = currentState.categoryNumTasks;
+    final numCompletedTasks = currentCategoryWithInfo.numCompletedTasks;
+    final newNumCompletedTasks = _getNewCountFromUpdatedTask(
+        newColoredTask.task.isCompleted, numCompletedTasks);
+
+    _emitCategoryTasksLoadedState(
+      currentCategoryNumTasks: currentState.categoryNumTasks,
+      newNumCompletedTasks: newNumCompletedTasks,
+      newTasks: updatedTasksList,
+    );
+  }
+
+  int _getNewCountFromUpdatedTask(
+          bool newColoredTaskStatus, oldNumCompletedTasks) =>
+      newColoredTaskStatus
+          ? oldNumCompletedTasks + 1
+          : oldNumCompletedTasks - 1;
+
+  void _emitCategoryTasksLoadedState({
+    required CategoryNumTasks currentCategoryNumTasks,
+    int? newNumAllTasks,
+    int? newNumCompletedTasks,
+    required List<ColoredTask> newTasks,
+    Category? category,
+  }) {
+    emit(CategoryTasksLoadedState(
+      categoryNumTasks: currentCategoryNumTasks.copyWith(
+          numAllTasks: newNumAllTasks,
+          numCompletedTasks: newNumCompletedTasks,
+          category: category),
+      tasks: newTasks,
+    ));
   }
 }
