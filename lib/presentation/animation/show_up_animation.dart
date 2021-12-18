@@ -7,7 +7,7 @@ class ShowUp extends StatefulWidget {
   final Duration? duration;
   final bool goesUp;
 
-  ShowUp(
+  const ShowUp(
       {required this.child, this.delay, required this.goesUp, this.duration});
 
   @override
@@ -17,13 +17,20 @@ class ShowUp extends StatefulWidget {
 class _ShowUpState extends State<ShowUp> with TickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<Offset> _animOffset;
+  bool _animate = false;
+  late Duration duration;
+  static bool _isStart = true;
 
   @override
   void initState() {
     super.initState();
 
-    _animController = AnimationController(
-        vsync: this, duration: widget.duration ?? Duration(milliseconds: 1000));
+    duration = widget.duration == null
+        ? const Duration(milliseconds: 1000)
+        : widget.duration!;
+    _animController =
+        AnimationController(vsync: this, duration: widget.duration ?? duration);
+
     final curve =
         CurvedAnimation(curve: Curves.decelerate, parent: _animController);
     _animOffset = Tween<Offset>(
@@ -31,17 +38,27 @@ class _ShowUpState extends State<ShowUp> with TickerProviderStateMixin {
         .animate(curve);
     if (widget.delay == null) {
       _animController.forward();
-    } else {
-      Timer(Duration(milliseconds: widget.delay!), () {
-        _animController.forward();
+      setState(() {
+        _animate = true;
+        _isStart = false;
       });
+    } else {
+      _isStart
+          ? Future.delayed(Duration(milliseconds: widget.delay!), () {
+              setState(() {
+                _animate = true;
+                _isStart = false;
+              });
+            })
+          : _animate = true;
+      _animController.forward();
     }
   }
 
   @override
   void dispose() {
-    super.dispose();
     _animController.dispose();
+    super.dispose();
   }
 
   @override
@@ -55,8 +72,9 @@ class _ShowUpState extends State<ShowUp> with TickerProviderStateMixin {
         animation: _animController,
         child: widget.child,
         builder: (context, child) {
-          return Opacity(
-            opacity: _animController.value,
+          return AnimatedOpacity(
+            opacity: _animate ? 1 : 0,
+            duration: duration,
             child: Transform.translate(
               offset: _animOffset.value,
               child: child!,

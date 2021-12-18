@@ -17,11 +17,11 @@ class TasksCubit extends Cubit<TasksState> {
 
   TasksCubit() : super(TasksInitialState());
 
+
   Future<void> loadTasks() async {
     emit(TasksLoadingState());
-
-    final tasks = await _tasksRepository.readAllWithColor();
-
+    // final tasks = await _tasksRepository.readAllWithColor();
+    final tasks = await _tasksRepository.readTodayColoredTask();
     if (tasks.isEmpty)
       emit(TasksEmptyState());
     else
@@ -48,11 +48,14 @@ class TasksCubit extends Cubit<TasksState> {
     await _addNotification(task: newTaskToAdd.task);
 
     if (state is TasksLoadedState) {
+      print('shkasdkaskdlaslkdaskdalskdaskdalsdkaslkdaslkdit');
       final updatedTasks =
           List<ColoredTask>.from((state as TasksLoadedState).tasks)
             ..add(newTaskToAdd);
       emit(TasksLoadedState(tasks: updatedTasks));
     } else if (state is TasksEmptyState) {
+      print('shitasldkjjlasdasjldaljsdlasdjasldjasljdasd2');
+
       emit(TasksLoadedState(tasks: [newTaskToAdd]));
     }
   }

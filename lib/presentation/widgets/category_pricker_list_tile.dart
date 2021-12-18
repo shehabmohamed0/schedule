@@ -22,7 +22,7 @@ class CategoryPickerListTile extends StatelessWidget {
               BoxShadow(
                 color: category.categoryColor,
                 blurRadius: 2,
-                offset: Offset(1, 1),
+                offset: const Offset(1, 1),
               ),
             ]),
       ),

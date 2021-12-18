@@ -61,10 +61,7 @@ class CalendarScreen extends StatelessWidget {
                       ? const Center(
                           child: Text(
                             'No Tasks on the day.',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: KIconColor
-                            ),
+                            style: TextStyle(fontSize: 18, color: KIconColor),
                           ),
                         )
                       : ListView.builder(

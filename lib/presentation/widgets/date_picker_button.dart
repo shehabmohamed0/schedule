@@ -19,17 +19,17 @@ class DatePickerButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FaIcon(
+          const FaIcon(
             FontAwesomeIcons.calendar,
             size: 24,
             color: KIconColor,
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           Text(
             dateTimeString,
-            style: TextStyle(
+            style: const TextStyle(
                 color: KIconColor, fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ],

@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: FaIcon(
+          icon: const FaIcon(
             FontAwesomeIcons.gripLines,
             color: KIconColor,
           ),
@@ -29,14 +29,14 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: FaIcon(
+            icon: const FaIcon(
               FontAwesomeIcons.search,
               color: KIconColor,
             ),
             onPressed: () {},
           ),
           IconButton(
-            icon: FaIcon(
+            icon: const FaIcon(
               FontAwesomeIcons.calendar,
               color: KIconColor,
             ),
@@ -53,11 +53,11 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pushNamed(context, AppRouter.addTaskScreen);
           },
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SafeArea(
           child: Container(
             child: Column(
@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 ShowUp(
                   goesUp: false,
-                  child: Text(
+                  child: const Text(
                     'What\'s up, Joy!',
                     style: TextStyle(
                         fontSize: 34,
@@ -74,30 +74,30 @@ class HomeScreen extends StatelessWidget {
                         color: KDrawerColor),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 ShowUp(
                   goesUp: false,
-                  duration: Duration(milliseconds: 600),
-                  child: Text(
+                  duration: const Duration(milliseconds: 600),
+                  child: const Text(
                     'CATEGORIES',
                     style: TextStyle(
                         fontSize: 14, letterSpacing: 1.5, color: KIconColor),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   height: 110,
-                  child: CategoriesListView(),
+                  child: const CategoriesListView(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 ShowUp(
                   goesUp: false,
-                  duration: Duration(milliseconds: 600),
-                  child: Text(
+                  duration: const Duration(milliseconds: 600),
+                  child: const Text(
                     'TODAY\'S TASKS',
                     style: TextStyle(
                       fontSize: 14,
@@ -109,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                TasksListView(),
+                const TasksListView(),
               ],
             ),
           ),

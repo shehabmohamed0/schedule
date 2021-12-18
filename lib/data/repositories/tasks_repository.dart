@@ -22,6 +22,10 @@ class TasksRepository {
     return await tasksDao.readAllWithColor();
   }
 
+  Future<List<ColoredTask>> readTodayColoredTask() async {
+    return await tasksDao.readTodayColoredTasks(DateTime.now());
+  }
+
   Future<List<ColoredTask>> readCategoryTasksWithColor(
       Category category) async {
     return await tasksDao.readCategoryTasksWithColor(category);

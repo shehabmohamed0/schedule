@@ -94,7 +94,7 @@ class _ListTileCheckBoxState extends State<ListTileCheckBox>
                           ? _colorTween.value
                           : KIconColor.withOpacity(.5),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.check,
                       size: 16.0,
                       color: Colors.white,
@@ -116,7 +116,7 @@ class _ListTileCheckBoxState extends State<ListTileCheckBox>
                           style: BorderStyle.solid,
                           color: widget.color),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.check,
                   size: 16.0,
                   color: Colors.white,

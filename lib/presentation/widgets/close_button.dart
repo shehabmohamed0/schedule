@@ -8,11 +8,11 @@ class CloseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
         style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.all(18),
+            padding: const EdgeInsets.all(18),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100)),
             side: BorderSide(color: KIconColor.withOpacity(0.3), width: 2)),
-        child: Icon(
+        child: const Icon(
           Icons.close,
           size: 24,
           color: KIconColor,

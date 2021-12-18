@@ -60,7 +60,7 @@ class _TasksLoadedStateWidget extends StatelessWidget {
                     .deleteTask(task: currentTaskWithColor);
               },
               child: Padding(
-                padding: EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: TaskListTile(
                   taskWithColor: currentTaskWithColor,
                   onCheckBoxTab: () {
@@ -98,10 +98,10 @@ class _EmptyStateWidget extends StatelessWidget {
           goesUp: true,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(
+            children: const [
+              Expanded(
                 child: Image(
-                  image: const AssetImage('images/noThing.png'),
+                  image: AssetImage('images/noThing.png'),
                 ),
                 flex: 8,
               ),

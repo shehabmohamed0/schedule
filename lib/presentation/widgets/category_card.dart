@@ -11,7 +11,7 @@ class CategoryCard extends StatefulWidget {
   final double sliderProgressValue;
   final Function() onTab;
 
-  CategoryCard({
+  const CategoryCard({
     Key? key,
     required this.numAllTasks,
     required this.showedTaskWord,
@@ -34,7 +34,7 @@ class _CategoryCardState extends State<CategoryCard>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
     );
   }
 
@@ -45,7 +45,7 @@ class _CategoryCardState extends State<CategoryCard>
     return InkWell(
       onTap: widget.onTab,
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         width: 200,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -53,7 +53,7 @@ class _CategoryCardState extends State<CategoryCard>
           boxShadow: [
             BoxShadow(
               color: KIconColor.withOpacity(0.2),
-              offset: Offset(0, 6),
+              offset: const Offset(0, 6),
               blurRadius: 20,
             ),
           ],
@@ -62,17 +62,17 @@ class _CategoryCardState extends State<CategoryCard>
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             FittedBox(
               fit: BoxFit.contain,
               child: Text(
                 '${widget.numAllTasks} ${widget.showedTaskWord}',
-                style: TextStyle(color: KIconColor),
+                style: const TextStyle(color: KIconColor),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             FittedBox(
@@ -80,22 +80,22 @@ class _CategoryCardState extends State<CategoryCard>
               child: Text(
                 "${widget.categoryName}",
                 maxLines: 1,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: KDrawerColor,
                     overflow: TextOverflow.ellipsis),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             Center(
                 child: SliderTheme(
               data: SliderThemeData(
                 activeTrackColor: widget.sliderColor,
-                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0.0),
-                overlayShape: RoundSliderOverlayShape(overlayRadius: 0.0),
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0.0),
+                overlayShape: const RoundSliderOverlayShape(overlayRadius: 0.0),
                 trackShape: CustomTrackShape(),
                 trackHeight: 2,
               ),

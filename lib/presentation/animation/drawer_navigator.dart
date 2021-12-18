@@ -83,10 +83,10 @@ class _DrawerNavigatorState extends State<DrawerNavigator>
                     final borderRadiusValue = animValue * 50;
 
                     if (_animationController.isCompleted)
-                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
                           statusBarIconBrightness: Brightness.light));
                     if (_animationController.isDismissed)
-                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
                           statusBarIconBrightness: Brightness.dark));
                     return GestureDetector(
                       onTap: () {

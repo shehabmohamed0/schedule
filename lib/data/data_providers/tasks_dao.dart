@@ -40,6 +40,18 @@ class TasksDao {
     return result.map((json) => Task.fromJson(json)).toList();
   }
 
+  Future<List<ColoredTask>> readTodayColoredTasks(DateTime today) async {
+    final db = await AppDatabase.instance.database;
+    String matchDay = today.toIso8601String().split('T')[0];
+    print(matchDay);
+    final result = await db.rawQuery('''
+    SELECT  * from $tasksTable LEFT JOIN $categoriesTable
+    ON $tasksTable.${TaskFields.categoryId} = $categoriesTable.${CategoryFields.id}
+    WHERE $tasksTable.${TaskFields.taskDate} LIKE '%$matchDay%'
+    ''');
+    return result.map((json) => ColoredTask.fromJson(json)).toList();
+  }
+
   Future<List<ColoredTask>> readAllWithColor() async {
     final db = await AppDatabase.instance.database;
 
