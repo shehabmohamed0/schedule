@@ -147,6 +147,10 @@ class _TaskDateTimePickerState extends State<TaskDateTimePicker> {
                     () {
                       reminderDateTime =
                           selectedDay.subtract(Duration(minutes: minutes));
+                      if (minutes == 0) {
+                        reminderDateTime =
+                            reminderDateTime!.add(const Duration(seconds: 5));
+                      }
                     },
                   );
                 } else {

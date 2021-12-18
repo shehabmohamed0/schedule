@@ -14,8 +14,10 @@ import 'package:schedule/logic/cubit/category/category_cubit.dart';
 import 'package:schedule/logic/cubit/tasks/tasks_cubit.dart';
 import 'package:schedule/presentation/animation/show_up_animation.dart';
 import 'package:schedule/presentation/screens/add_category/add_category_screen.dart';
+import 'package:schedule/presentation/widgets/calendr_widget.dart';
 import 'package:schedule/presentation/widgets/date_picker_button.dart';
 import 'package:schedule/presentation/widgets/picker_outlined_button.dart';
+import 'package:schedule/presentation/widgets/task_date_time_picker.dart';
 import 'package:schedule/presentation/widgets/task_list_tile.dart';
 
 part 'widgets/task_number_card.dart';
@@ -51,7 +53,7 @@ class CategoryScreen extends StatelessWidget {
                         vertical: 16.0, horizontal: 8.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(15),
                         bottomRight: Radius.circular(15),
                       ),
@@ -75,13 +77,13 @@ class CategoryScreen extends StatelessWidget {
                           animationDuration: 1000,
                           center: Text(
                             state.categoryNumTasks.category.categoryName,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: KDrawerColor),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24.0),
                           child: Row(
@@ -93,7 +95,7 @@ class CategoryScreen extends StatelessWidget {
                                 color: categoryColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               TaskNumberCard(
@@ -109,8 +111,9 @@ class CategoryScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                    padding: EdgeInsets.symmetric(vertical: 15),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -126,13 +129,13 @@ class CategoryScreen extends StatelessWidget {
                       category: state.categoryNumTasks.category,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Align(
+                  const Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
+                      padding: EdgeInsets.only(left: 16.0),
                       child: Text(
                         'All TASKS',
                         style: TextStyle(
@@ -143,7 +146,7 @@ class CategoryScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Expanded(
@@ -207,13 +210,13 @@ class CategoryScreen extends StatelessWidget {
                           child: FloatingActionButton(
                             backgroundColor:
                                 state.categoryNumTasks.category.categoryColor,
-                            child: Icon(Icons.add),
+                            child: const Icon(Icons.add),
                             onPressed: () {
-                              showModalBottomSheet(
+                              showModalBottomSheet<bool>(
                                 context: context,
                                 isScrollControlled: true,
                                 isDismissible: true,
-                                shape: RoundedRectangleBorder(
+                                shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(15),
                                         topLeft: Radius.circular(15))),
@@ -233,7 +236,7 @@ class CategoryScreen extends StatelessWidget {
                 ],
               );
             } else {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -253,10 +256,10 @@ class _EmptyStateWidget extends StatelessWidget {
       alignment: Alignment.center,
       child: ShowUp(
         goesUp: true,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 4.0),
+        child: const Padding(
+          padding: EdgeInsets.only(bottom: 4.0),
           child: Image(
-            image: const AssetImage('images/noThing.png'),
+            image: AssetImage('images/noThing.png'),
           ),
         ),
       ),

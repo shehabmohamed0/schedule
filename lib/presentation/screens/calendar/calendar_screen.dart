@@ -57,50 +57,61 @@ class CalendarScreen extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: ListView.builder(
-                    itemCount: state.selectedEvents.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: Dismissible(
-                          key:
-                              Key('${state.selectedEvents[index].task.taskId}'),
-                          direction: DismissDirection.endToStart,
-                          confirmDismiss: (direction) async {
-                            return await Future.value(
-                                direction == DismissDirection.endToStart);
-                          },
-                          onDismissed: (direction) async {
-                            await context
-                                .read<TasksCubit>()
-                                .deleteTask(task: state.selectedEvents[index]);
-                            await context
-                                .read<CalendarCubit>()
-                                .deleteTask(state.selectedEvents[index]);
-                          },
-                          child: TaskListTile(
-                            taskWithColor: state.selectedEvents[index],
-                            onTap: () {},
-                            onCheckBoxTab: () async {
-                              await context.read<TasksCubit>().updateTask(
-                                    task: state.selectedEvents[index].task
-                                        .copyWith(
-                                            isCompleted: !state
-                                                .selectedEvents[index]
-                                                .task
-                                                .isCompleted),
-                                    color: state.selectedEvents[index].color ??
-                                        Colors.grey,
-                                  );
-                              await context
-                                  .read<CalendarCubit>()
-                                  .updateTask(state.selectedEvents[index]);
-                            },
+                  child: state.selectedEvents.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'No Tasks on the day.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: KIconColor
+                            ),
                           ),
+                        )
+                      : ListView.builder(
+                          itemCount: state.selectedEvents.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: Dismissible(
+                                key: Key(
+                                    '${state.selectedEvents[index].task.taskId}'),
+                                direction: DismissDirection.endToStart,
+                                confirmDismiss: (direction) async {
+                                  return await Future.value(
+                                      direction == DismissDirection.endToStart);
+                                },
+                                onDismissed: (direction) async {
+                                  await context.read<TasksCubit>().deleteTask(
+                                      task: state.selectedEvents[index]);
+                                  await context
+                                      .read<CalendarCubit>()
+                                      .deleteTask(state.selectedEvents[index]);
+                                },
+                                child: TaskListTile(
+                                  taskWithColor: state.selectedEvents[index],
+                                  onTap: () {},
+                                  onCheckBoxTab: () async {
+                                    await context.read<TasksCubit>().updateTask(
+                                          task: state.selectedEvents[index].task
+                                              .copyWith(
+                                                  isCompleted: !state
+                                                      .selectedEvents[index]
+                                                      .task
+                                                      .isCompleted),
+                                          color: state.selectedEvents[index]
+                                                  .color ??
+                                              Colors.grey,
+                                        );
+                                    await context
+                                        .read<CalendarCubit>()
+                                        .updateTask(
+                                            state.selectedEvents[index]);
+                                  },
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
               ),
             ],

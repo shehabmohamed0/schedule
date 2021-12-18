@@ -11,8 +11,10 @@ class BottomModalSheetWidget extends StatefulWidget {
 
 class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
   TextEditingController inputText = TextEditingController();
-  TimeOfDay time = TimeOfDay.now();
-  DateTime date = DateTime.now();
+
+  DateTime taskDateTime = DateTime.now();
+  bool hasStartTime = false;
+  DateTime? reminderDateTime;
 
   @override
   void didChangeDependencies() {
@@ -36,7 +38,7 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
                   borderRadius: BorderRadius.circular(15)),
               child: TextField(
                 controller: inputText,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     contentPadding: EdgeInsets.all(5),
                     hintText: 'Input new task here',
                     hintStyle: TextStyle(
@@ -46,7 +48,7 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
                     border: InputBorder.none),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Row(
@@ -54,25 +56,13 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
                 Transform.scale(
                     scale: .87,
                     child: DatePickerButton(
-                        onPressed: () async {
-                          var newDate = await showDatePicker(
-                            context: context,
-                            initialDate: date,
-                            firstDate: date.subtract(Duration(days: 365)),
-                            lastDate: date.add(
-                              Duration(days: 365),
-                            ),
-                          );
-                          if (newDate != null) {
-                            setState(() {
-                              date = newDate;
-                            });
-                          }
+                        onPressed: () {
+                          _datePicker(context: context);
                         },
-                        dateTimeString: _getDateString(date))),
-                CalendarWidget(),
+                        dateTimeString: _getDateString(taskDateTime))),
                 // PickerOutlinedButton(
-                //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                //     shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(100)),
                 //     onPressed: () async {
                 //       var newTime = await showTimePicker(
                 //           context: context, initialTime: time);
@@ -91,32 +81,39 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
                 //           fontSize: 15,
                 //           fontWeight: FontWeight.w500),
                 //     )),
-                Spacer(),
+                const Spacer(),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.grey,
-                    shape: CircleBorder(),
+                    shape: const CircleBorder(),
                   ),
                   onPressed: () async {
-                    //TODO: Implement this method
-                    // if (inputText.text.isEmpty)
-                    //   await Fluttertoast.showToast(
-                    //       msg: "Task can't be empty.",
-                    //       gravity: ToastGravity.SNACKBAR,
-                    //       fontSize: 16.0);
-                    //
-                    // final newTask =
-                    // //any Id
-                    //     Task(name: inputText.text, taskDay: DateTime.now());
-                    // final taskWithID = await context
-                    //     .read<CategoryCubit>()
-                    //     .createTask(task: newTask, category: widget.category);
-                    // await context.read<TasksCubit>().addTask(
-                    //     task: taskWithID!.task, category: widget.category);
+                    if (inputText.text.isEmpty) {
+                      await Fluttertoast.showToast(
+                          msg: "Task can't be empty.",
+                          gravity: ToastGravity.SNACKBAR,
+                          fontSize: 16.0);
+                      return;
+                    }
+
+                    final newTask =
+                        //any Id
+                        Task(
+                            name: inputText.text,
+                            taskDay: this.taskDateTime,
+                            hasStartTime: this.hasStartTime,
+                            reminderDateTime: this.reminderDateTime);
+                    final taskWithID = await context
+                        .read<CategoryCubit>()
+                        .createTask(task: newTask, category: widget.category);
+                    await context
+                        .read<TasksCubit>()
+                        .addTaskToUIAndSetNotification(
+                            task: taskWithID!.task, category: widget.category);
                     inputText.clear();
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: RotatedBox(
                       quarterTurns: 3,
                       child: Icon(
@@ -132,6 +129,28 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
         ),
       ),
     );
+  }
+
+  void _datePicker({required BuildContext context}) async {
+    final tempTask = await showDialog<Task?>(
+      context: context,
+      builder: (_) => Dialog(
+        elevation: 1,
+        backgroundColor: Colors.white,
+        child: TaskDateTimePicker(
+          currentTaskDay: this.taskDateTime,
+          hasStartTime: this.hasStartTime,
+          reminderDateTime: this.reminderDateTime,
+        ),
+      ),
+    );
+    if (tempTask != null) {
+      setState(() {
+        this.taskDateTime = tempTask.taskDay;
+        this.hasStartTime = tempTask.hasStartTime;
+        this.reminderDateTime = reminderDateTime;
+      });
+    }
   }
 
   String _getDateString(DateTime date) {
@@ -153,19 +172,5 @@ class _BottomModalSheetWidgetState extends State<BottomModalSheetWidget> {
     } else {
       return DateFormat.Md().format(date);
     }
-  }
-}
-class CalendarWidget extends StatelessWidget {
-  const CalendarWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(alignment: Alignment.bottomCenter,children: [
-      FaIcon(FontAwesomeIcons.solidCalendar,color: Colors.blueAccent.withOpacity(.5),size: 28,),
-      Padding(
-        padding: const EdgeInsets.only(bottom: 2.5),
-        child: Text('18',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.white),),
-      ),
-    ],);
   }
 }

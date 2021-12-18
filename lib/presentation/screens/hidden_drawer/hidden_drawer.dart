@@ -40,14 +40,14 @@ class HiddenDrawerScreen extends StatelessWidget {
                       circularStrokeCap: CircularStrokeCap.round,
                       animateFromLastPercent: true,
                       animation: true,
-                      center: CircleAvatar(
+                      center: const CircleAvatar(
                         radius: 50,
                         child: FlutterLogo(
                           size: 50,
                         ),
                       ),
                     ),
-                    Spacer(
+                    const Spacer(
                       flex: 2,
                     ),
                     Container(
@@ -58,14 +58,14 @@ class HiddenDrawerScreen extends StatelessWidget {
                       child: IconButton(
                         alignment: Alignment.center,
                         onPressed: closeCallBack,
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_ios_new_sharp,
                           color: Colors.white,
                           size: 20,
                         ),
                       ),
                     ),
-                    Spacer(
+                    const Spacer(
                       flex: 1,
                     ),
                   ],

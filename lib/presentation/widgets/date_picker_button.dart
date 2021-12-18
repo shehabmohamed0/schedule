@@ -4,7 +4,7 @@ import 'package:schedule/core/constants/constants.dart';
 import 'package:schedule/presentation/widgets/picker_outlined_button.dart';
 
 class DatePickerButton extends StatelessWidget {
-  final Function() onPressed;
+  final void Function() onPressed;
   final String dateTimeString;
 
   const DatePickerButton(

@@ -82,13 +82,13 @@ class NotificationPlugin {
   }
 
   Future<void> showNotification() async {
-    var androidChanelSpecifics = AndroidNotificationDetails(
+    var androidChanelSpecifics = const AndroidNotificationDetails(
         'Schedule', 'ScheduleChanel',
         channelDescription: 'Shit no',
         importance: Importance.max,
         priority: Priority.high,
         playSound: true);
-    var iosChanelSpecifics = IOSNotificationDetails();
+    var iosChanelSpecifics = const IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         android: androidChanelSpecifics, iOS: iosChanelSpecifics);
 
@@ -106,16 +106,18 @@ class NotificationPlugin {
     tz.setLocalLocation(tz.getLocation(timeZoneName!));
   }
 
-  Future<void> zonedScheduleNotification({required int id,required String title ,String? body,required DateTime dateTime}) async {
-
-   print( tz.TZDateTime.from(dateTime, tz.local).add(Duration(seconds: 5)).toIso8601String());
-    var androidChanelSpecifics = AndroidNotificationDetails(
+  Future<void> zonedScheduleNotification(
+      {required int id,
+      required String title,
+      String? body,
+      required DateTime dateTime}) async {
+    var androidChanelSpecifics = const AndroidNotificationDetails(
         'Schedule', 'ScheduleChanel',
         channelDescription: 'Shit no',
         importance: Importance.max,
         priority: Priority.high,
         playSound: true);
-    var iosChanelSpecifics = IOSNotificationDetails();
+    var iosChanelSpecifics = const IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         android: androidChanelSpecifics, iOS: iosChanelSpecifics);
 
@@ -123,7 +125,7 @@ class NotificationPlugin {
         id,
         title,
         body,
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)),
+        (await tz.TZDateTime.from(dateTime, tz.local)),
         platformChannelSpecifics,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
@@ -356,5 +358,3 @@ class NotificationPlugin {
         await flutterLocalNotificationsPlugin.pendingNotificationRequests();
   }
 }
-
-
