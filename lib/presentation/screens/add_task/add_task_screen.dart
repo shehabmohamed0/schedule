@@ -8,15 +8,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:schedule/core/constants/constants.dart';
 import 'package:schedule/data/data_providers/categories_dao.dart';
 import 'package:schedule/data/models/category.dart';
+import 'package:schedule/data/models/task.dart';
 import 'package:schedule/logic/cubit/add_task/add_task_cubit.dart';
+import 'package:schedule/logic/cubit/tasks/tasks_cubit.dart';
 import 'package:schedule/presentation/widgets/category_pricker_list_tile.dart';
 import 'package:schedule/presentation/widgets/color_picker_button.dart';
 import 'package:schedule/presentation/widgets/date_picker_button.dart';
 import 'package:schedule/presentation/widgets/task_date_time_picker.dart';
 
-
 class AddTaskScreen extends StatelessWidget {
-  AddTaskScreen({
+  const AddTaskScreen({
     Key? key,
   }) : super(key: key);
 
@@ -34,29 +35,30 @@ class AddTaskScreen extends StatelessWidget {
           child: BlocConsumer<AddTaskCubit, AddTaskState>(
             listener: (context, state) {
               //TODO: Implement this method
-              // if (state.isSubmitting && !state.isEdit) {
-              //   context.read<TasksCubit>().createTask(
-              //       task: Task(
-              //
-              //           name: state.task.value,
-              //           taskDay: state.dateTime),
-              //       category: state.category ?? null);
-              //
-              //   Navigator.of(context).pop();
-              // } else if (state.isSubmitting && state.isEdit) {
-              //   context.read<TasksCubit>().updateTask(
-              //       task: Task(
-              //           taskId: context
-              //               .read<AddTaskCubit>()
-              //               .currentTask!
-              //               .task
-              //               .taskId,
-              //           name: state.task.value,
-              //           categoryId: state.category?.categoryID,
-              //           taskDay: state.dateTime),
-              //       color: state.category?.categoryColor ?? Colors.grey);
-              //   Navigator.of(context).pop();
-              // }
+              if (state.isSubmitting && !state.isEdit) {
+                context.read<TasksCubit>().createTaskAndAddItToUI(
+                    task: Task(
+                        name: state.task.value,
+                        taskDay: state.taskDateTime,
+                        hasStartTime: state.hasStartTime,
+                        reminderDateTime: state.reminderDateTime),
+                    category: state.category ?? null);
+
+                Navigator.of(context).pop();
+              } else if (state.isSubmitting && state.isEdit) {
+                context.read<TasksCubit>().updateTask(
+                    task: Task(
+                      taskId:
+                          context.read<AddTaskCubit>().currentTask!.task.taskId,
+                      name: state.task.value,
+                      taskDay: state.taskDateTime,
+                      hasStartTime: state.hasStartTime,
+                      reminderDateTime: state.reminderDateTime,
+                      categoryId: state.category?.categoryID,
+                    ),
+                    color: state.category?.categoryColor ?? Colors.grey);
+                Navigator.of(context).pop();
+              }
             },
             builder: (context, state) {
               return LayoutBuilder(builder: (_, constrains) {
@@ -71,12 +73,12 @@ class AddTaskScreen extends StatelessWidget {
                           alignment: Alignment.topRight,
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.all(18),
-                                shape: CircleBorder(),
+                                padding: const EdgeInsets.all(18),
+                                shape: const CircleBorder(),
                                 side: BorderSide(
                                     color: KIconColor.withOpacity(0.3),
                                     width: 2)),
-                            child: Icon(
+                            child: const Icon(
                               Icons.close,
                               size: 24,
                               color: KIconColor,
@@ -86,7 +88,7 @@ class AddTaskScreen extends StatelessWidget {
                             },
                           ),
                         ),
-                        Spacer(
+                        const Spacer(
                           flex: 2,
                         ),
                         TextFormField(
@@ -97,7 +99,8 @@ class AddTaskScreen extends StatelessWidget {
                               hintStyle:
                                   TextStyle(color: KIconColor.withOpacity(.8)),
                               errorText: state.errorText),
-                          style: TextStyle(fontSize: 28, color: Colors.black87),
+                          style: const TextStyle(
+                              fontSize: 28, color: Colors.black87),
                           onChanged: (value) {
                             context
                                 .read<AddTaskCubit>()
@@ -112,9 +115,7 @@ class AddTaskScreen extends StatelessWidget {
                           children: [
                             DatePickerButton(
                                 onPressed: () async {
-                                  _datePicker(
-                                      context: context,
-                                      initialDate: state.taskDateTime);
+                                  _datePicker(context: context, state: state);
                                 },
                                 dateTimeString: state.dateTimeString),
                             ColorPickerButton(
@@ -128,15 +129,15 @@ class AddTaskScreen extends StatelessWidget {
                             )
                           ],
                         ),
-                        Spacer(
+                        const Spacer(
                           flex: 2,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            SizedBox(),
+                            const SizedBox(),
                             IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.create_new_folder_outlined,
                                 color: KIconColor,
                                 size: 32,
@@ -144,7 +145,7 @@ class AddTaskScreen extends StatelessWidget {
                               onPressed: () {},
                             ),
                             IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 FontAwesomeIcons.flag,
                                 color: KIconColor,
                                 size: 26,
@@ -152,17 +153,17 @@ class AddTaskScreen extends StatelessWidget {
                               onPressed: () {},
                             ),
                             IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 FontAwesomeIcons.moon,
                                 color: KIconColor,
                                 size: 26,
                               ),
                               onPressed: () {},
                             ),
-                            SizedBox(),
+                            const SizedBox(),
                           ],
                         ),
-                        Spacer(
+                        const Spacer(
                           flex: 2,
                         ),
                         Align(
@@ -177,17 +178,18 @@ class AddTaskScreen extends StatelessWidget {
                             child: RawMaterialButton(
                               elevation: 0.0,
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text(
                                       state.submitText,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.white, fontSize: 18),
                                     ),
-                                    Icon(
+                                    const Icon(
                                       Icons.keyboard_arrow_up_outlined,
                                       color: Colors.white,
                                     )
@@ -262,25 +264,25 @@ class AddTaskScreen extends StatelessWidget {
     );
   }
 
-  void _datePicker( 
-      {required BuildContext context, required DateTime initialDate}) async {
-    // final newDate = await showDatePicker(
-    //   context: context,
-    //   initialDate: initialDate,
-    //   firstDate: DateTime(DateTime.now().year - 1),
-    //   lastDate: DateTime(DateTime.now().year + 1),
-    // );
-    // if (newDate != null) {
-    //   context.read<AddTaskCubit>().setTaskDateTo(newDate);
-    // }
-    showDialog(
+  void _datePicker(
+      {required BuildContext context, required AddTaskState state}) async {
+    final tempTask = await showDialog<Task?>(
       context: context,
       builder: (_) => Dialog(
         elevation: 1,
         backgroundColor: Colors.white,
-        child: const TaskDateTimePicker(),
+        child: TaskDateTimePicker(
+          currentTaskDay: state.taskDateTime,
+          hasStartTime: state.hasStartTime,
+          reminderDateTime: state.reminderDateTime,
+        ),
       ),
     );
+    if (tempTask != null) {
+      context.read<AddTaskCubit>().setTaskTimeInfo(
+          taskDateTime: tempTask.taskDay,
+          hasStartTime: tempTask.hasStartTime,
+          reminderTime: tempTask.reminderDateTime);
+    }
   }
 }
-

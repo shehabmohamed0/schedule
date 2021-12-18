@@ -11,7 +11,7 @@ class AddTaskState extends Equatable {
   final bool isEdit;
   final bool isSubmitting;
 
-  AddTaskState({
+  const AddTaskState({
     required this.isEdit,
     required this.isSubmitting,
     required this.task,

@@ -35,7 +35,6 @@ class TasksCubit extends Cubit<TasksState> {
 
   Future<void> createTaskAndAddItToUI(
       {required Task task, Category? category}) async {
-
     final createdTask = await _tasksRepository
         .create(task.copyWith(categoryId: category?.categoryID));
 
@@ -43,13 +42,6 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   Future<void> addTaskToUI({required Task task, Category? category}) async {
-    notificationPlugin.zonedScheduleNotification(
-      id: task.taskId!,
-      title: task.name,
-      dateTime: task.taskDay.add(
-        Duration(seconds: 5),
-      ),
-    );
     final newTaskToAdd =
         ColoredTask(task: task, color: category?.categoryColor);
     if (state is TasksLoadedState) {

@@ -13,27 +13,30 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   final ColoredTask? currentTask;
 
   AddTaskCubit(this.currentTask)
-      : super(currentTask == null
-            ? AddTaskState(
-                isEdit: false,
-                isSubmitting: false,
-                task: FormzNameModel.pure(),
-                taskDateTime: DateTime.now(),
-                hasStartTime: false,
-                category: null,
-              )
-            : AddTaskState(
-                isEdit: true,
-                isSubmitting: false,
-                task: FormzNameModel.dirty(currentTask.task.name),
-                taskDateTime: currentTask.task.taskDay,
-                hasStartTime: currentTask.task.hasStartTime,
-                category: Category(
-                  categoryID: currentTask.task.categoryId,
-                  categoryName: 'Any Thing',
-                  categoryColor: currentTask.color ?? Colors.grey,
+      : super(
+          currentTask == null
+              ? AddTaskState(
+                  isEdit: false,
+                  isSubmitting: false,
+                  task: const FormzNameModel.pure(),
+                  taskDateTime: DateTime.now(),
+                  hasStartTime: false,
+                  category: null,
+                )
+              : AddTaskState(
+                  isEdit: true,
+                  isSubmitting: false,
+                  task: FormzNameModel.dirty(currentTask.task.name),
+                  taskDateTime: currentTask.task.taskDay,
+                  hasStartTime: currentTask.task.hasStartTime,
+                  reminderDateTime: currentTask.task.reminderDateTime,
+                  category: Category(
+                    categoryID: currentTask.task.categoryId,
+                    categoryName: 'Any Thing',
+                    categoryColor: currentTask.color ?? Colors.grey,
+                  ),
                 ),
-              ));
+        );
 
   void taskInputChanged(String task) {
     emit(state.copyWith(task: FormzNameModel.dirty(task)));
@@ -41,6 +44,17 @@ class AddTaskCubit extends Cubit<AddTaskState> {
 
   void setTaskDateTo(DateTime dateTime) {
     emit(state.copyWith(taskDateTime: dateTime));
+  }
+
+  void setTaskTimeInfo({
+    required DateTime taskDateTime,
+    required bool hasStartTime,
+    DateTime? reminderTime,
+  }) {
+    emit(state.copyWith(
+        taskDateTime: taskDateTime,
+        hasStartTime: hasStartTime,
+        reminderDateTime: reminderTime));
   }
 
   void taskCategoryChanged(Category? category) {
@@ -51,7 +65,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     if (state.task.valid) {
       emit(state.copyWith(isSubmitting: true));
     } else if (state.task.pure) {
-      emit(state.copyWith(task: FormzNameModel.dirty('')));
+      emit(state.copyWith(task: const FormzNameModel.dirty('')));
     }
   }
 }

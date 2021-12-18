@@ -1,22 +1,24 @@
 part of 'task_date_time_picker.dart';
 
 class TaskDialogListTile extends StatelessWidget {
-  const TaskDialogListTile({
-    Key? key,
-    required this.leadingIcon,
-    required this.title,
-    required this.trailingText,
-  }) : super(key: key);
+  const TaskDialogListTile(
+      {Key? key,
+      required this.leadingIcon,
+      required this.title,
+      required this.trailingText,
+      required this.onTap})
+      : super(key: key);
 
   final IconData leadingIcon;
   final String title;
   final String trailingText;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       dense: true,
-      onTap: () {},
+      onTap: onTap,
       leading: Icon(
         leadingIcon,
         size: 20,
@@ -24,13 +26,13 @@ class TaskDialogListTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
         ),
       ),
       trailing: Text(
         trailingText,
-        style: TextStyle(fontSize: 12),
+        style: const TextStyle(fontSize: 12),
       ),
     );
   }
