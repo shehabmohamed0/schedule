@@ -8,6 +8,8 @@ import 'package:schedule/data/models/task.dart';
 import 'package:schedule/data/models/taskWithColor.dart';
 import 'package:schedule/data/repositories/tasks_repository.dart';
 import 'package:schedule/data/data_providers/notification_plugin.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 part 'tasks_state.dart';
 
@@ -16,7 +18,6 @@ class TasksCubit extends Cubit<TasksState> {
   NotificationPlugin notificationPlugin = NotificationPlugin.instance;
 
   TasksCubit() : super(TasksInitialState());
-
 
   Future<void> loadTasks() async {
     emit(TasksLoadingState());
@@ -41,29 +42,33 @@ class TasksCubit extends Cubit<TasksState> {
     await addTaskToUIAndSetNotification(task: createdTask, category: category);
   }
 
-  Future<void> addTaskToUIAndSetNotification({required Task task, Category? category}) async {
+  Future<void> addTaskToUIAndSetNotification(
+      {required Task task, Category? category}) async {
     final newTaskToAdd =
         ColoredTask(task: task, color: category?.categoryColor);
 
     await _addNotification(task: newTaskToAdd.task);
 
-    if (state is TasksLoadedState) {
-      print('shkasdkaskdlaslkdaskdalskdaskdalsdkaslkdaslkdit');
-      final updatedTasks =
-          List<ColoredTask>.from((state as TasksLoadedState).tasks)
-            ..add(newTaskToAdd);
-      emit(TasksLoadedState(tasks: updatedTasks));
-    } else if (state is TasksEmptyState) {
-      print('shitasldkjjlasdasjldaljsdlasdjasldjasljdasd2');
-
-      emit(TasksLoadedState(tasks: [newTaskToAdd]));
+    if (isSameDay(DateTime.now(), task.taskDay)) {
+      if (state is TasksLoadedState) {
+        final updatedTasks =
+            List<ColoredTask>.from((state as TasksLoadedState).tasks)
+              ..add(newTaskToAdd);
+        emit(TasksLoadedState(tasks: updatedTasks));
+      } else if (state is TasksEmptyState) {
+        emit(TasksLoadedState(tasks: [newTaskToAdd]));
+      }
     }
   }
 
   Future<void> _addNotification({required Task task}) async {
     if (task.reminderDateTime == null) return;
-    await notificationPlugin.zonedScheduleNotification(
-        id: task.taskId!, title: task.name, dateTime: task.reminderDateTime!);
+
+    final timezone = await tz.TZDateTime.from(task.reminderDateTime!, tz.local);
+
+    if (tz.TZDateTime.now(tz.local).isBefore(timezone))
+      await notificationPlugin.zonedScheduleNotification(
+          id: task.taskId!, title: task.name, zonedDateTime: timezone);
   }
 
   Future<void> updateTask({required Task task, required Color color}) async {

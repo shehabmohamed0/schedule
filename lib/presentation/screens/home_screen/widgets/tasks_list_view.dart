@@ -40,7 +40,7 @@ class _TasksLoadedStateWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           final currentTaskWithColor = tasks[index];
           return ShowUp(

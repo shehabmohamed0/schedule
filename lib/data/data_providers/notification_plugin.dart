@@ -110,9 +110,9 @@ class NotificationPlugin {
       {required int id,
       required String title,
       String? body,
-      required DateTime dateTime}) async {
+      required tz.TZDateTime zonedDateTime}) async {
     var androidChanelSpecifics = const AndroidNotificationDetails(
-        'Schedule', 'ScheduleChanel',
+        'ZonedSchedule', 'ZonedScheduleChanel',
         channelDescription: 'Shit no',
         importance: Importance.max,
         priority: Priority.high,
@@ -122,11 +122,7 @@ class NotificationPlugin {
         android: androidChanelSpecifics, iOS: iosChanelSpecifics);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        id,
-        title,
-        body,
-        (await tz.TZDateTime.from(dateTime, tz.local)),
-        platformChannelSpecifics,
+        id, title, body, zonedDateTime, platformChannelSpecifics,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);

@@ -21,9 +21,9 @@ void main() async {
   NotificationPlugin.instance
       .setListenedForLowerVersions(onNotificationInLowerVersions);
   NotificationPlugin.instance.setOnNotificationClick(onNotificationClick);
-  Bloc.observer = AppBlocObserver();
+  //Bloc.observer = AppBlocObserver();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 Future<void> initialize() async {
@@ -58,7 +58,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(primaryIconTheme: const IconThemeData(color: KIconColor)),
+        theme:
+            ThemeData(primaryIconTheme: const IconThemeData(color: KIconColor)),
         onGenerateRoute: AppRouter.onGenerateRoute,
         initialRoute: AppRouter.drawerNavigator,
       ),

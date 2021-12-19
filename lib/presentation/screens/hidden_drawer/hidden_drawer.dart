@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:schedule/core/constants/constants.dart';
+import 'package:schedule/logic/cubit/categories/categories_cubit.dart';
 import 'package:schedule/presentation/router/app_router.dart';
 import 'package:schedule/presentation/screens/hidden_drawer/widgets/hidden_drawer_list_tile.dart';
 import 'package:schedule/presentation/screens/hidden_drawer/widgets/line_chart.dart';
@@ -31,21 +33,44 @@ class HiddenDrawerScreen extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircularPercentIndicator(
-                      radius: 120,
-                      percent: 0.5,
-                      lineWidth: 3.5,
-                      progressColor: Colors.purpleAccent.shade400,
-                      backgroundColor: Color(0xff3C4E7B),
-                      circularStrokeCap: CircularStrokeCap.round,
-                      animateFromLastPercent: true,
-                      animation: true,
-                      center: const CircleAvatar(
-                        radius: 50,
-                        child: FlutterLogo(
-                          size: 50,
-                        ),
-                      ),
+                    BlocBuilder<CategoriesCubit, CategoriesState>(
+                      builder: (context, state) {
+                        if (state is CategoriesLoadedState)
+                          return CircularPercentIndicator(
+                            radius: 120,
+                            percent: state.allCategoriesProgress(),
+                            lineWidth: 3.5,
+                            progressColor: Colors.purpleAccent.shade400,
+                            backgroundColor: const Color(0xff3C4E7B),
+                            circularStrokeCap: CircularStrokeCap.round,
+                            animateFromLastPercent: true,
+                            animation: true,
+                            center: const CircleAvatar(
+                              radius: 50,
+                              child: FlutterLogo(
+                                size: 50,
+                              ),
+                            ),
+                          );
+                        else {
+                          return CircularPercentIndicator(
+                            radius: 120,
+                            percent: 0,
+                            lineWidth: 3.5,
+                            progressColor: Colors.purpleAccent.shade400,
+                            backgroundColor: Color(0xff3C4E7B),
+                            circularStrokeCap: CircularStrokeCap.round,
+                            animateFromLastPercent: true,
+                            animation: true,
+                            center: const CircleAvatar(
+                              radius: 50,
+                              child: FlutterLogo(
+                                size: 50,
+                              ),
+                            ),
+                          );
+                        }
+                      },
                     ),
                     const Spacer(
                       flex: 2,

@@ -31,6 +31,17 @@ class CategoriesLoadedState extends CategoriesState {
         : 'Tasks';
   }
 
+  double allCategoriesProgress() {
+    double numTasks = 0;
+    double numCompletedTasks = 0;
+
+    categories.forEach((element) {
+      numTasks += element.numAllTasks;
+      numCompletedTasks += element.numCompletedTasks;
+    });
+    return numTasks == 0 ? 0 : numCompletedTasks / numTasks;
+  }
+
   @override
   List<Object?> get props => [categories];
 }

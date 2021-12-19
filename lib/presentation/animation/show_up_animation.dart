@@ -45,10 +45,8 @@ class _ShowUpState extends State<ShowUp> with TickerProviderStateMixin {
     } else {
       _isStart
           ? Future.delayed(Duration(milliseconds: widget.delay!), () {
-              setState(() {
-                _animate = true;
-                _isStart = false;
-              });
+              _animate = true;
+              _isStart = false;
             })
           : _animate = true;
       _animController.forward();
@@ -72,9 +70,8 @@ class _ShowUpState extends State<ShowUp> with TickerProviderStateMixin {
         animation: _animController,
         child: widget.child,
         builder: (context, child) {
-          return AnimatedOpacity(
-            opacity: _animate ? 1 : 0,
-            duration: duration,
+          return Opacity(
+            opacity: _animate ? _animController.value : 0,
             child: Transform.translate(
               offset: _animOffset.value,
               child: child!,

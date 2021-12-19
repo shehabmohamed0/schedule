@@ -57,7 +57,7 @@ class TasksDao {
 
     final result = await db.rawQuery('''
     SELECT  * from $tasksTable LEFT JOIN $categoriesTable
-    ON ($tasksTable.${TaskFields.categoryId} = $categoriesTable.${CategoryFields.id} ) 
+    ON ($tasksTable.${TaskFields.categoryId} = $categoriesTable.${CategoryFields.id}) 
     ''');
     return result.map((json) => ColoredTask.fromJson(json)).toList();
   }
